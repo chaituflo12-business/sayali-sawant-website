@@ -27,24 +27,61 @@ supabase secrets set WEBHOOK_SECRET=... AUTOMATION_WEBHOOK_URL=https://hook.make
 supabase gen types typescript --project-id <id> > src/lib/supabase/database.types.ts
 ```
 
-Insert staff rows after the doctor and receptionist have Auth users:
+The `deliver-webhooks` cron job in `supabase/migrations/0004_cron_webhooks.sql`
+reads its target from Vault, so create those two secrets once per project (SQL
+editor, service role):
+
+```sql
+select vault.create_secret('https://<project-ref>.functions.supabase.co', 'functions_url');
+select vault.create_secret('<service role key>', 'service_role_key');
+```
+
+`book_appointment`, `reschedule_appointment`, `cancel_appointment`,
+`get_appointment_by_token` and `assert_booking_rate_limit` are granted to
+`service_role` only, so `SUPABASE_SERVICE_ROLE_KEY` must be set in the Vercel
+project or booking returns `NOT_CONFIGURED` and the rate limiter fails closed.
+
+## Staff onboarding
+
+1. Supabase Dashboard → Authentication → Users → **Invite user**, once for the
+   doctor and once for the receptionist. They sign in with an email OTP at
+   `/admin/login`; there is no password.
+2. Copy each new user's UUID from the same Users table.
+3. Run this in the SQL editor, one row per person:
 
 ```sql
 insert into staff (user_id, role, display_name)
-values ('<auth uuid>', 'doctor', 'Dr. Sayali Sawant');
+values
+  ('<doctor auth uuid>', 'doctor', 'Dr. Sayali Sawant'),
+  ('<reception auth uuid>', 'reception', 'Reception')
+on conflict (user_id) do nothing;
 ```
 
-Schedule `deliver-webhooks` every minute. Details: `docs/automation.md`.
+Nobody can see `/admin` until their UUID is in `staff`: every admin policy goes
+through `is_staff()`. To remove access, delete the `staff` row.
+
+## Make + AiSensy
+
+WhatsApp, Google Calendar and Google Sheets live in Make.com, with AiSensy as
+the WhatsApp BSP. This app only emits signed webhook events and exposes a few
+bearer-token read APIs. The event list, the 11 Make scenarios, the AiSensy
+Campaign API shape and every EN/HI/MR template body are in
+[`docs/automation.md`](docs/automation.md); exported scenario blueprints belong
+in [`docs/make-blueprints/`](docs/make-blueprints/README.md).
 
 ## Scripts
 
 ```bash
 npm run build
 npm run check:copy
+npm run check:contrast
+npm run test:denylist
 npm run test:double-booking
 ```
 
-`test:double-booking` runs two `book_appointment` RPCs with `Promise.all` against the same slot. It expects exactly one success and `SLOT_TAKEN` on the other. Requires a live Supabase project with materialised slots.
+`check:contrast` reports WCAG ratios for every colour pair the site ships.
+`test:denylist` proves reminder notes cannot contain drug names or doses.
+`test:double-booking` runs two `book_appointment` RPCs with `Promise.all` against the same slot. It expects exactly one success and `SLOT_TAKEN` on the other. Requires a live Supabase project with materialised slots and `SUPABASE_SERVICE_ROLE_KEY`.
 
 ## Lighthouse (run locally; this repo does not record scores)
 

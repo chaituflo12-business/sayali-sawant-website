@@ -1,0 +1,177 @@
+{
+  "name": "01 Appointment lifecycle",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 0,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": { "x": 0, "y": 0 },
+        "restore": {
+          "parameters": {
+            "hook": { "label": "opd-outbox (set after import)" }
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "util:FunctionSleep",
+      "version": 1,
+      "parameters": {},
+      "mapper": { "duration": "0" },
+      "metadata": {
+        "designer": { "x": 300, "y": 0 },
+        "notes": "Replace with a JavaScript / custom-code module that recomputes sha256 HMAC of the raw body with WEBHOOK_SECRET and compares it to the x-signature header."
+      }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": { "designer": { "x": 600, "y": 0 } },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 4,
+              "module": "http:ActionSendData",
+              "version": 3,
+              "parameters": { "handleErrors": true },
+              "filter": {
+                "name": "created",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{1.event}}",
+                      "b": "appointment.created",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{1.opted_out}}",
+                      "b": "false",
+                      "o": "text:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "url": "https://backend.aisensy.com/campaign/t1/api/v2",
+                "method": "post",
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "data": "{\n  \"apiKey\": \"{{AISENSY_API_KEY}}\",\n  \"campaignName\": \"ss_opd_created_en\",\n  \"destination\": \"{{1.patient.whatsapp}}\",\n  \"userName\": \"{{1.patient.name}}\",\n  \"templateParams\": [\n    \"{{1.patient.name}}\",\n    \"{{1.ref}}\",\n    \"{{1.slot.display}}\",\n    \"{{1.clinic.address}}\",\n    \"{{1.clinic.maps_url}}\",\n    \"{{1.links.reschedule}}\",\n    \"{{1.links.cancel}}\",\n    \"{{1.doctor}}\"\n  ]\n}"
+              },
+              "metadata": {
+                "designer": { "x": 900, "y": -300 },
+                "notes": "Add Google Calendar insert and Google Sheets append after this module."
+              }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 5,
+              "module": "http:ActionSendData",
+              "version": 3,
+              "parameters": { "handleErrors": true },
+              "filter": {
+                "name": "rescheduled",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{1.event}}",
+                      "b": "appointment.rescheduled",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{1.opted_out}}",
+                      "b": "false",
+                      "o": "text:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "url": "https://backend.aisensy.com/campaign/t1/api/v2",
+                "method": "post",
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "data": "{\n  \"apiKey\": \"{{AISENSY_API_KEY}}\",\n  \"campaignName\": \"ss_opd_rescheduled_en\",\n  \"destination\": \"{{1.patient.whatsapp}}\",\n  \"userName\": \"{{1.patient.name}}\",\n  \"templateParams\": [\n    \"{{1.patient.name}}\",\n    \"{{1.ref}}\",\n    \"{{1.slot.display}}\",\n    \"{{1.clinic.address}}\",\n    \"{{1.clinic.maps_url}}\",\n    \"{{1.links.reschedule}}\",\n    \"{{1.links.cancel}}\",\n    \"{{1.doctor}}\"\n  ]\n}"
+              },
+              "metadata": {
+                "designer": { "x": 900, "y": 0 },
+                "notes": "Add Google Calendar patch (search by opdRef) and Google Sheets update after this module."
+              }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 6,
+              "module": "http:ActionSendData",
+              "version": 3,
+              "parameters": { "handleErrors": true },
+              "filter": {
+                "name": "cancelled",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{1.event}}",
+                      "b": "appointment.cancelled",
+                      "o": "text:equal"
+                    },
+                    {
+                      "a": "{{1.opted_out}}",
+                      "b": "false",
+                      "o": "text:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "url": "https://backend.aisensy.com/campaign/t1/api/v2",
+                "method": "post",
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "data": "{\n  \"apiKey\": \"{{AISENSY_API_KEY}}\",\n  \"campaignName\": \"ss_opd_cancelled_en\",\n  \"destination\": \"{{1.patient.whatsapp}}\",\n  \"userName\": \"{{1.patient.name}}\",\n  \"templateParams\": [\n    \"{{1.patient.name}}\",\n    \"{{1.ref}}\",\n    \"{{1.slot.display}}\",\n    \"{{1.clinic.address}}\",\n    \"{{1.clinic.maps_url}}\",\n    \"{{1.links.reschedule}}\",\n    \"{{1.links.cancel}}\",\n    \"{{1.doctor}}\"\n  ]\n}"
+              },
+              "metadata": {
+                "designer": { "x": 900, "y": 300 },
+                "notes": "Add Google Calendar delete (search by opdRef) and Google Sheets status update after this module."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confest": true,
+      "dlq": true,
+      "freshVariables": false
+    },
+    "designer": { "orphans": [] },
+    "notes": [
+      "Skeleton only: reconnect the webhook and HTTP modules after import.",
+      "Every route should end with POST {SITE_URL}/api/message-status using the MAKE_READ_TOKEN bearer token.",
+      "Attach an error handler that calls the ops_alert template."
+    ]
+  }
+}
