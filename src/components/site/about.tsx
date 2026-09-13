@@ -7,7 +7,7 @@ import {
 
 export function About() {
   return (
-    <section id="about" className="scroll-mt-24 py-14">
+    <section id="about" className="scroll-mt-24 bg-surface-warm py-14">
       <div className="mx-auto max-w-6xl px-4">
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           About {DOCTOR_NAME}

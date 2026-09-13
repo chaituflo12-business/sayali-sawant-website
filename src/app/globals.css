@@ -2,34 +2,103 @@
 @import "react-day-picker/style.css";
 
 :root {
-  --background: #f8fafc;
+  --background: #f2f9ff;
   --surface: #ffffff;
-  --ink: #0f172a;
-  --muted: #475569;
-  --primary: #0e7490;
-  --primary-soft: #e0f2f7;
-  --accent: #10b981;
-  --warning: #f59e0b;
-  --error: #dc2626;
-  --border: #e2e8f0;
-  --warm: #fdf7f2;
+  --surface-warm: #fff4f8;
+  --ink: #2b1a36;
+  --muted: #57346b;
+  --primary: #0056a7;
+  --primary-hover: #002b54;
+  --primary-soft: #daedff;
+  --accent: #824ea1;
+  --accent-soft: #ebe1f0;
+  --highlight: #ffafcc;
+  --highlight-soft: #ffdeea;
+  --warning: #b60046;
+  --warning-soft: #ffe9f1;
+  --error: #ab003f;
+  --border: #e0d2e9;
+  --focus-ring: #0082fb;
+}
+
+@theme {
+  --color-thistle-100: #2b1a36;
+  --color-thistle-200: #57346b;
+  --color-thistle-300: #824ea1;
+  --color-thistle-400: #a87ec1;
+  --color-thistle-500: #cdb4db;
+  --color-thistle-600: #d6c2e2;
+  --color-thistle-700: #e0d2e9;
+  --color-thistle-800: #ebe1f0;
+  --color-thistle-900: #f5f0f8;
+  --color-thistle: #cdb4db;
+
+  --color-pastel_petal-100: #5b0023;
+  --color-pastel_petal-200: #b60046;
+  --color-pastel_petal-300: #ff116c;
+  --color-pastel_petal-400: #ff6ca4;
+  --color-pastel_petal-500: #ffc8dd;
+  --color-pastel_petal-600: #ffd2e3;
+  --color-pastel_petal-700: #ffddea;
+  --color-pastel_petal-800: #ffe9f1;
+  --color-pastel_petal-900: #fff4f8;
+  --color-pastel_petal: #ffc8dd;
+
+  --color-baby_pink-100: #56001f;
+  --color-baby_pink-200: #ab003f;
+  --color-baby_pink-300: #ff025f;
+  --color-baby_pink-400: #ff5895;
+  --color-baby_pink-500: #ffafcc;
+  --color-baby_pink-600: #ffbed6;
+  --color-baby_pink-700: #ffcee0;
+  --color-baby_pink-800: #ffdeea;
+  --color-baby_pink-900: #ffeff5;
+  --color-baby_pink: #ffafcc;
+
+  --color-icy_blue-100: #012f57;
+  --color-icy_blue-200: #035eaf;
+  --color-icy_blue-300: #0f8dfb;
+  --color-icy_blue-400: #66b6fd;
+  --color-icy_blue-500: #bde0fe;
+  --color-icy_blue-600: #cbe6fe;
+  --color-icy_blue-700: #d8ecfe;
+  --color-icy_blue-800: #e5f3ff;
+  --color-icy_blue-900: #f2f9ff;
+  --color-icy_blue: #bde0fe;
+
+  --color-sky_blue-100: #002b54;
+  --color-sky_blue-200: #0056a7;
+  --color-sky_blue-300: #0082fb;
+  --color-sky_blue-400: #50aaff;
+  --color-sky_blue-500: #a2d2ff;
+  --color-sky_blue-600: #b6dcff;
+  --color-sky_blue-700: #c8e4ff;
+  --color-sky_blue-800: #daedff;
+  --color-sky_blue-900: #edf6ff;
+  --color-sky_blue: #a2d2ff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-warm: var(--surface-warm);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-soft: var(--primary-soft);
   --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-highlight: var(--highlight);
+  --color-highlight-soft: var(--highlight-soft);
   --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
   --color-error: var(--error);
   --color-border: var(--border);
-  --color-warm: var(--warm);
+  --color-focus-ring: var(--focus-ring);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(43 26 54 / 0.06);
 }
 
 html {
@@ -47,6 +116,11 @@ h2,
 h3,
 .font-display {
   font-family: var(--font-display);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {

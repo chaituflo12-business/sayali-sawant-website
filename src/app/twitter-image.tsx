@@ -17,18 +17,27 @@ export default function TwitterImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: 80,
-          background: "#0E7490",
-          color: "#F8FAFC",
+          background: "#f2f9ff",
+          color: "#2b1a36",
         }}
       >
-        <div style={{ fontSize: 28, opacity: 0.9 }}>Consultant Obstetrician</div>
+        <div style={{ fontSize: 28 }}>Consultant Obstetrician</div>
         <div style={{ fontSize: 64, fontWeight: 700, marginTop: 12 }}>
           Dr. Sayali Sawant
         </div>
-        <div style={{ fontSize: 32, marginTop: 16 }}>
+        <div style={{ fontSize: 32, marginTop: 16, color: "#0056a7" }}>
           Gynaecologist & IVF Specialist
         </div>
-        <div style={{ fontSize: 28, marginTop: 28, color: "#E0F2F7" }}>
+        <div
+          style={{
+            width: 180,
+            height: 10,
+            marginTop: 28,
+            borderRadius: 5,
+            background: "#ffafcc",
+          }}
+        />
+        <div style={{ fontSize: 28, marginTop: 28 }}>
           Goregaon West, Mumbai
         </div>
       </div>

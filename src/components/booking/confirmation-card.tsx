@@ -7,7 +7,7 @@ export function ConfirmationCard({
   appointment: BookedAppointment;
 }) {
   return (
-    <div className="rounded-xl border border-accent/30 bg-accent/5 p-5">
+    <div className="rounded-xl border border-accent bg-accent-soft p-5">
       <p className="text-sm font-medium text-accent">Appointment confirmed</p>
       <p className="font-display mt-2 text-xl text-ink">
         Reference {appointment.ref}

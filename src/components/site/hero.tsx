@@ -38,7 +38,15 @@ export function Hero({ summary }: { summary: SlotSummary }) {
         </div>
 
         <figure className="relative mx-auto w-full max-w-sm">
-          <div className="overflow-hidden rounded-xl border border-border shadow-sm">
+          <div
+            className="pointer-events-none absolute -left-6 -top-6 h-40 w-40 rounded-full bg-baby_pink-500 opacity-60 blur-2xl"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute -bottom-8 -right-4 h-48 w-48 rounded-full bg-icy_blue-500 opacity-60 blur-2xl"
+            aria-hidden
+          />
+          <div className="relative overflow-hidden rounded-xl border border-border shadow-sm">
             <Image
               src={PROFILE_PHOTO}
               alt={`${DOCTOR_NAME}, female gynaecologist in Goregaon West, Mumbai`}
@@ -48,7 +56,7 @@ export function Hero({ summary }: { summary: SlotSummary }) {
               className="h-auto w-full object-cover"
             />
           </div>
-          <figcaption className="mt-3 flex flex-wrap gap-2">
+          <figcaption className="relative mt-3 flex flex-wrap gap-2">
             {["MBBS", "DNB Obs & Gyn", `MMC Reg. ${MMC_REG_NO}`].map((chip) => (
               <span
                 key={chip}

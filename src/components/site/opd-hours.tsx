@@ -3,8 +3,8 @@ import type { DaySummary, SlotSummary } from "@/lib/slot-types";
 import { formatSession } from "@/lib/hours";
 
 function statusClass(status: DaySummary["status"]) {
-  if (status === "available") return "border-accent/40 bg-accent/10 text-ink";
-  if (status === "limited") return "border-warning/40 bg-warning/10 text-ink";
+  if (status === "available") return "border-accent bg-accent-soft text-ink";
+  if (status === "limited") return "border-highlight bg-highlight-soft text-ink";
   if (status === "full") return "border-border bg-background text-muted";
   return "border-border bg-background text-muted";
 }
@@ -31,7 +31,7 @@ export function OpdHours({ summary }: { summary: SlotSummary }) {
         <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-surface shadow-sm">
           <table className="w-full min-w-[520px] text-left text-sm">
             <caption className="sr-only">Weekly OPD hours</caption>
-            <thead className="border-b border-border bg-primary-soft/60">
+            <thead className="border-b border-border bg-primary-soft">
               <tr>
                 <th className="px-4 py-3 font-medium text-ink">Day</th>
                 <th className="px-4 py-3 font-medium text-ink">Sessions</th>

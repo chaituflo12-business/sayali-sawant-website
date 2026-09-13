@@ -20,7 +20,7 @@ const STEPS = [
 
 export function VisitSteps() {
   return (
-    <section className="bg-warm py-14">
+    <section className="py-14">
       <div className="mx-auto max-w-6xl px-4">
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           How a visit works

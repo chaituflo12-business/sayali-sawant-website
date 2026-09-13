@@ -43,8 +43,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             className={cn(
               "rounded-xl border bg-surface px-4 py-3 shadow-sm",
               item.variant === "error"
-                ? "border-error/30"
-                : "border-accent/30",
+                ? "border-error"
+                : "border-accent",
             )}
           >
             <ToastPrimitive.Title className="text-sm font-medium text-ink">
