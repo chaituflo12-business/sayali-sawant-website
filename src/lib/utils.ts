@@ -15,7 +15,7 @@ export const buttonVariants = cva(
         secondary:
           "bg-surface text-ink border border-border hover:bg-primary-soft",
         ghost: "text-ink hover:bg-primary-soft",
-        whatsapp: "bg-[#0F766E] text-white hover:bg-[#0D9488]",
+        whatsapp: "bg-sky_blue-200 text-white hover:bg-sky_blue-100",
         danger: "bg-error text-white hover:bg-primary-hover",
       },
       size: {

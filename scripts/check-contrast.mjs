@@ -13,6 +13,13 @@ const tokens = { white: "#ffffff" };
 for (const [, name, value] of root.matchAll(/--([a-z-]+):\s*(#[0-9a-fA-F]{6});/g)) {
   tokens[name] = value;
 }
+// Palette steps such as sky_blue-200, for pairs used by a utility class rather
+// than a semantic token.
+for (const [, name, value] of css.matchAll(
+  /--color-([a-z_0-9-]+):\s*(#[0-9a-fA-F]{6});/g,
+)) {
+  tokens[name] = value;
+}
 
 function channel(value) {
   const c = value / 255;
@@ -46,6 +53,7 @@ const PAIRS = [
   ["muted", "surface", 4.5],
   ["white", "primary", 4.5],
   ["white", "primary-hover", 4.5],
+  ["white", "sky_blue-200", 4.5],
   ["accent", "surface", 4.5],
   ["accent", "accent-soft", 4.5],
   ["warning", "warning-soft", 4.5],
