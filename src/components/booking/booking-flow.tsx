@@ -18,6 +18,7 @@ import {
 } from "@/lib/validation/appointment";
 import { GOOGLE_MAPS_DIR_URL } from "@/config/site";
 import { ConfirmationCard } from "@/components/booking/confirmation-card";
+import { WaitlistForm } from "@/components/booking/waitlist-form";
 
 type Step = 1 | 2 | 3;
 
@@ -31,8 +32,8 @@ function dayLabel(date: string) {
 }
 
 function dayTone(status: DaySummary["status"]) {
-  if (status === "available") return "border-accent bg-accent/10";
-  if (status === "limited") return "border-warning bg-warning/10";
+  if (status === "available") return "border-accent bg-accent-soft";
+  if (status === "limited") return "border-highlight bg-highlight-soft text-ink";
   return "border-border bg-background text-muted";
 }
 
@@ -96,6 +97,10 @@ export function BookingFlow({
   }, [selectedDate]);
 
   const progress = useMemo(() => [1, 2, 3] as const, []);
+  const noneRemaining = useMemo(
+    () => slots.every((slot) => slot.remaining <= 0),
+    [slots],
+  );
 
   async function refetchSelectedDay() {
     if (!selectedDate) return;
@@ -213,7 +218,7 @@ export function BookingFlow({
       {step === 2 ? (
         <div>
           {slotTaken ? (
-            <p className="mb-3 rounded-xl border border-error/30 bg-error/5 px-3 py-2 text-sm text-error">
+            <p className="mb-3 rounded-xl border border-error bg-highlight-soft px-3 py-2 text-sm text-error">
               That time was just taken, please pick another
             </p>
           ) : null}
@@ -234,7 +239,7 @@ export function BookingFlow({
                       "min-h-11 rounded-xl border px-2 text-xs",
                       taken
                         ? "cursor-not-allowed border-border bg-background text-muted line-through"
-                        : "border-accent/40 bg-accent/10 text-ink",
+                        : "border-accent bg-accent-soft text-ink",
                       selected && "ring-2 ring-primary",
                     )}
                   >
@@ -245,8 +250,17 @@ export function BookingFlow({
               })}
             </div>
           )}
-          {slots.length === 0 && !loadingSlots ? (
-            <p className="text-sm text-muted">No open times on this day.</p>
+          {noneRemaining && !loadingSlots ? (
+            <>
+              <p className="text-sm text-muted">No open times on this day.</p>
+              {!manageToken && selectedDate ? (
+                <WaitlistForm
+                  dateIst={selectedDate}
+                  dayLabel={dayLabel(selectedDate)}
+                  visitType={visitType}
+                />
+              ) : null}
+            </>
           ) : null}
           <div className="mt-4 flex gap-2">
             <button

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "check:copy": "node scripts/check-banned-words.mjs",
-    "test:double-booking": "node scripts/test-double-booking.mjs"
+    "test:double-booking": "node scripts/test-double-booking.mjs",
+    "test:denylist": "node scripts/test-reminder-denylist.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",

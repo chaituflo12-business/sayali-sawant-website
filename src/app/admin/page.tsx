@@ -24,7 +24,7 @@ export default async function AdminTodayPage() {
     ? await gate.supabase
         .from("appointments")
         .select(
-          "id, public_ref, patient_name, whatsapp_e164, age, visit_type, status, slot_id",
+          "id, public_ref, patient_name, whatsapp_e164, age, visit_type, status, slot_id, report_ready_at, next_visit_suggested_at",
         )
         .in("slot_id", slotIds)
     : { data: [] };
