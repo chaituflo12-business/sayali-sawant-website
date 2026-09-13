@@ -2,7 +2,6 @@ import "server-only";
 import { createHash } from "node:crypto";
 import { headers } from "next/headers";
 import { createServiceClient } from "@/lib/supabase/service";
-import { createSupabaseServer } from "@/lib/supabase/server";
 
 const WINDOW_MINUTES = 10;
 const MAX_ATTEMPTS = 5;
@@ -22,20 +21,24 @@ async function clientIp(): Promise<string> {
 export async function assertBookingRateLimit(): Promise<{
   allowed: boolean;
 }> {
-  const ip = await clientIp();
-  const ipHash = hashIp(ip);
   const service = createServiceClient();
-  const client = service ?? (await createSupabaseServer());
-  if (!client) return { allowed: true };
 
-  const { data, error } = await client.rpc("assert_booking_rate_limit", {
-    p_ip_hash: ipHash,
+  // assert_booking_rate_limit is service_role only. Without that key there is
+  // no counter to consult, so production refuses rather than waving bookings
+  // through; local development stays usable.
+  if (!service) {
+    return { allowed: process.env.NODE_ENV !== "production" };
+  }
+
+  const ip = await clientIp();
+  const { data, error } = await service.rpc("assert_booking_rate_limit", {
+    p_ip_hash: hashIp(ip),
     p_max: MAX_ATTEMPTS,
     p_minutes: WINDOW_MINUTES,
   });
 
   if (error) {
-    return { allowed: true };
+    return { allowed: process.env.NODE_ENV !== "production" };
   }
 
   return { allowed: data !== false };

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/site/site-shell";
-import { createSupabaseServer } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import { ManageAppointment } from "@/components/booking/manage-appointment";
 import { formatSlotDisplay } from "@/lib/datetime";
 
@@ -54,7 +54,7 @@ export default async function ManagePage({
   const { action } = await searchParams;
   if (!/^[0-9a-f-]{36}$/i.test(token)) notFound();
 
-  const supabase = await createSupabaseServer();
+  const supabase = createServiceClient();
   if (!supabase) {
     return (
       <SiteShell showSticky={false}>
