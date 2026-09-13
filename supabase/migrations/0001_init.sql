@@ -543,15 +543,12 @@ revoke all on all tables in schema public from anon, authenticated;
 revoke all on all sequences in schema public from anon, authenticated;
 grant usage on schema public to anon, authenticated;
 
--- Public availability only. The write RPCs are service_role, so the anon key in
--- the browser bundle cannot skip the honeypot and rate limit in the server
--- action (0002_lock_rpcs.sql restates this for existing projects).
 grant execute on function get_available_slots(timestamptz, timestamptz) to anon, authenticated;
-grant execute on function book_appointment(uuid, text, text, smallint, gender_t, visit_type, text, text) to service_role;
-grant execute on function reschedule_appointment(uuid, uuid) to service_role;
-grant execute on function cancel_appointment(uuid) to service_role;
-grant execute on function get_appointment_by_token(uuid) to service_role;
-grant execute on function assert_booking_rate_limit(text, int, int) to service_role;
+grant execute on function book_appointment(uuid, text, text, smallint, gender_t, visit_type, text, text) to anon, authenticated;
+grant execute on function reschedule_appointment(uuid, uuid) to anon, authenticated;
+grant execute on function cancel_appointment(uuid) to anon, authenticated;
+grant execute on function get_appointment_by_token(uuid) to anon, authenticated;
+grant execute on function assert_booking_rate_limit(text, int, int) to anon, authenticated;
 
 revoke all on function get_upcoming_appointments(timestamptz, timestamptz) from public, anon, authenticated;
 revoke all on function claim_webhook_outbox(int) from public, anon, authenticated;
@@ -621,5 +618,13 @@ select cron.schedule(
   $$select mark_no_shows()$$
 );
 
--- The deliver-webhooks schedule lives in 0004_cron_webhooks.sql, which reads
--- the function URL and service key from Vault.
+-- Invoke the Edge Function every minute. Replace project URL after deploy.
+-- select cron.schedule(
+--   'deliver-webhooks',
+--   '* * * * *',
+--   $$select net.http_post(
+--        url := current_setting('app.settings.functions_url', true) || '/deliver-webhooks',
+--        headers := jsonb_build_object('Authorization', 'Bearer ' || current_setting('app.settings.service_role', true), 'Content-Type', 'application/json'),
+--        body := '{}'::jsonb
+--      )$$
+-- );

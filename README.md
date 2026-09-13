@@ -41,6 +41,24 @@ select vault.create_secret('<service role key>', 'service_role_key');
 `service_role` only, so `SUPABASE_SERVICE_ROLE_KEY` must be set in the Vercel
 project or booking returns `NOT_CONFIGURED` and the rate limiter fails closed.
 
+## Migrations
+
+`supabase/migrations` is append-only. Supabase records every applied file and
+never re-runs it, so editing a file that has already been pushed to any project
+changes nothing in that project and leaves fresh projects with a different
+schema.
+
+- Never edit a migration that has been pushed anywhere. Treat it as frozen.
+- To change something, add the next numbered file and `create or replace`,
+  `alter`, `revoke` or `grant` from there.
+- Say in a comment at the top of the new file which earlier file it supersedes,
+  as `0002_lock_rpcs.sql` does for the anon grants in `0001_init.sql`.
+
+Current chain: `0001_init.sql` (schema) → `0002_lock_rpcs.sql` (write RPCs to
+`service_role`) → `0003_automation.sql` (automation tables, RPCs, outbox
+trigger) → `0004_cron_webhooks.sql` (Vault-backed `deliver-webhooks` schedule)
+→ `0005_hold_retry_cleanup.sql` (`create_hold_appointment` error handling).
+
 ## Staff onboarding
 
 1. Supabase Dashboard → Authentication → Users → **Invite user**, once for the

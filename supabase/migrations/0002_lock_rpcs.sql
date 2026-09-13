@@ -1,3 +1,5 @@
+-- Supersedes the anon grants in 0001. 0001 is frozen; never edit an applied migration.
+--
 -- Lock write RPCs to service_role.
 --
 -- The anon key ships in the browser bundle, so anything granted to anon can be
