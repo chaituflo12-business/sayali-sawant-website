@@ -1,36 +1,17 @@
 import { NextResponse } from "next/server";
-import { verifySignature } from "@/lib/webhook/sign";
+import { authorizeMakeRequest } from "@/lib/api-auth";
 import { createServiceClient } from "@/lib/supabase/service";
 
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
-  const secret = process.env.WEBHOOK_SECRET;
-  if (!secret) {
+  const auth = authorizeMakeRequest(request);
+  if (!auth.ok) {
     return NextResponse.json(
-      { ok: false, code: "NOT_CONFIGURED", message: "WEBHOOK_SECRET is not set." },
-      { status: 503 },
+      { ok: false, code: auth.code, message: auth.message },
+      { status: auth.status },
     );
   }
-
-  const url = new URL(request.url);
-  const signature =
-    request.headers.get("x-signature") ?? request.headers.get("authorization");
-  const header = signature?.startsWith("Bearer ")
-    ? signature.slice("Bearer ".length)
-    : signature;
-  const body = `GET\n${url.pathname}${url.search}`;
-  if (!verifySignature(body, header ?? null, secret)) {
-    return NextResponse.json(
-      { ok: false, code: "UNAUTHORIZED", message: "Invalid signature." },
-      { status: 401 },
-    );
-  }
-
-  const from = url.searchParams.get("from") ?? new Date().toISOString();
-  const to =
-    url.searchParams.get("to") ??
-    new Date(Date.now() + 26 * 60 * 60 * 1000).toISOString();
 
   const supabase = createServiceClient();
   if (!supabase) {
@@ -40,9 +21,27 @@ export async function GET(request: Request) {
     );
   }
 
+  const url = new URL(request.url);
+
+  if (url.searchParams.get("status") === "no_show") {
+    const { data, error } = await supabase.rpc("get_no_shows_today");
+    if (error) {
+      return NextResponse.json(
+        { ok: false, code: "QUERY_ERROR", message: "Could not load no-shows." },
+        { status: 500 },
+      );
+    }
+    return NextResponse.json({ ok: true, data });
+  }
+
+  const hours = Number(url.searchParams.get("hours") ?? "24");
+  const window = Number.isFinite(hours) && hours > 0 && hours <= 720 ? hours : 24;
+  const from = new Date();
+  const to = new Date(from.getTime() + window * 60 * 60 * 1000);
+
   const { data, error } = await supabase.rpc("get_upcoming_appointments", {
-    from_date: from,
-    to_date: to,
+    from_date: from.toISOString(),
+    to_date: to.toISOString(),
   });
 
   if (error) {
@@ -52,5 +51,5 @@ export async function GET(request: Request) {
     );
   }
 
-  return NextResponse.json({ ok: true, data });
+  return NextResponse.json({ ok: true, hours: window, data });
 }
