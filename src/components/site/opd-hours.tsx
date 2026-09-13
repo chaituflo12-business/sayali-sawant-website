@@ -1,0 +1,80 @@
+import { OPD_HOURS } from "@/config/site";
+import type { DaySummary, SlotSummary } from "@/lib/slot-types";
+import { formatSession } from "@/lib/hours";
+
+function statusClass(status: DaySummary["status"]) {
+  if (status === "available") return "border-accent/40 bg-accent/10 text-ink";
+  if (status === "limited") return "border-warning/40 bg-warning/10 text-ink";
+  if (status === "full") return "border-border bg-background text-muted";
+  return "border-border bg-background text-muted";
+}
+
+function statusLabel(status: DaySummary["status"]) {
+  if (status === "available") return "Available";
+  if (status === "limited") return "Limited";
+  if (status === "full") return "Full";
+  return "Closed";
+}
+
+export function OpdHours({ summary }: { summary: SlotSummary }) {
+  return (
+    <section id="opd-hours" className="scroll-mt-24 py-14">
+      <div className="mx-auto max-w-6xl px-4">
+        <h2 className="font-display text-2xl text-ink md:text-3xl">
+          OPD hours in Goregaon West
+        </h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted">
+          Appointments are in 15-minute slots. Times are shown in Indian Standard
+          Time (IST).
+        </p>
+
+        <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-surface shadow-sm">
+          <table className="w-full min-w-[520px] text-left text-sm">
+            <caption className="sr-only">Weekly OPD hours</caption>
+            <thead className="border-b border-border bg-primary-soft/60">
+              <tr>
+                <th className="px-4 py-3 font-medium text-ink">Day</th>
+                <th className="px-4 py-3 font-medium text-ink">Sessions</th>
+                <th className="px-4 py-3 font-medium text-ink">Break</th>
+              </tr>
+            </thead>
+            <tbody>
+              {OPD_HOURS.map((day) => (
+                <tr key={day.label} className="border-b border-border last:border-0">
+                  <td className="px-4 py-3 font-medium text-ink">{day.label}</td>
+                  <td className="px-4 py-3 text-muted">
+                    {day.closed
+                      ? "Closed"
+                      : day.sessions.map((s) => formatSession(s)).join(" · ")}
+                  </td>
+                  <td className="px-4 py-3 text-muted">
+                    {day.closed ? "—" : day.breakLabel}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <h3 className="font-display mt-8 text-lg text-ink">Next 7 days</h3>
+        <ul className="mt-3 grid grid-cols-7 gap-2">
+          {summary.days.map((day) => {
+            const label = new Date(`${day.date}T00:00:00+05:30`).toLocaleDateString(
+              "en-GB",
+              { weekday: "short", day: "numeric", timeZone: "Asia/Kolkata" },
+            );
+            return (
+              <li
+                key={day.date}
+                className={`rounded-xl border px-1 py-3 text-center text-xs ${statusClass(day.status)}`}
+              >
+                <span className="block font-medium">{label}</span>
+                <span className="mt-1 block">{statusLabel(day.status)}</span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+  );
+}

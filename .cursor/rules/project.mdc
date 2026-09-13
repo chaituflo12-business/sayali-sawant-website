@@ -1,0 +1,50 @@
+---
+description: Dr. Sayali Sawant OPD website — stack, medical-ethics copy, SEO, and code conventions
+alwaysApply: true
+---
+
+You are building a production website and OPD appointment system for Dr. Sayali Sawant, Consultant Obstetrician & Gynaecologist and IVF/Infertility Specialist, practising in Goregaon West, Mumbai. The clinic has no brand name. The person is the brand: every title, heading, schema and URL promotes "Dr. Sayali Sawant".
+
+Verified facts (use exactly; do not invent others)
+- MBBS — Maharashtra University of Health Sciences, Nashik (2017)
+- DNB Obstetrics & Gynaecology — National Board of Examinations (2020)
+- Maharashtra Medical Council Reg. No. 2017/08/3926
+- Prior clinical work: Nova IVF Fertility, Indira IVF
+- Practice area: Goregaon West, Mumbai 400104 (catchment: Goregaon East, Malad, Jogeshwari, Andheri West, Kandivali, Borivali)
+
+Placeholders — read from src/config/site.ts, never hardcode
+CLINIC_ADDRESS, GOOGLE_MAPS_URL, GOOGLE_PLACE_ID, WHATSAPP_NUMBER, PHONE, EMAIL, OPD_HOURS (per weekday, with break), CONSULT_FEE (optional), PROFILE_PHOTO, LANGUAGES (English, Hindi, Marathi), SOCIAL_LINKS (LinkedIn, Practo, Justdial, Google Business Profile), EMERGENCY_HOSPITAL_NAME + EMERGENCY_PHONE.
+
+Stack (fixed — do not propose alternatives)
+- Next.js 15 App Router, TypeScript strict, Tailwind CSS v4
+- shadcn/ui only for Dialog/Sheet/Toast/Calendar
+- lucide-react icons, next/font with Inter (body) + Manrope (display)
+- Supabase (Postgres + RLS + Edge Functions) via @supabase/ssr
+- Service-role key only inside server actions / route handlers, never in client bundles
+- Deployed on Vercel. Static/ISR for public pages. Node runtime for the booking server action
+- Zod for all input validation. Server Actions for the booking form. No client-side Supabase writes
+- Automation: outbound webhook events appointment.created / appointment.rescheduled / appointment.cancelled to AUTOMATION_WEBHOOK_URL, HMAC-SHA256 signed with WEBHOOK_SECRET
+- WhatsApp, Google Calendar and Google Sheets steps live in Make/n8n, NOT in this codebase
+
+Design language
+Palette (CSS variables in globals.css): background #F8FAFC, surface #FFFFFF, ink #0F172A, muted #475569, primary #0E7490, primary-soft #E0F2F7, accent #10B981 (success / slot available only), warning #F59E0B, error #DC2626, border #E2E8F0. One warm neutral section #FDF7F2.
+Minimal and airy. Generous whitespace, one accent per screen, rounded-xl cards, 1px borders, nothing heavier than shadow-sm. WCAG AA contrast.
+Mobile-first at 375px. Sticky bottom "Book OPD slot" bar on mobile. Tap targets ≥44px.
+Motion: subtle only (fade/translate 150–250ms), prefers-reduced-motion respected. No parallax, no autoplay video, no carousels.
+
+Medical-ethics copy rules (NMC / Maharashtra Medical Council)
+NEVER use: "best", "top", "No.1", "leading", "renowned", "guaranteed", "painless", "100% success", any success-rate percentage, comparisons with other doctors, "cure".
+No patient testimonials with clinical claims, no before/after imagery, no celebrity endorsements, no discount or offer language.
+Write factually. Tone: calm, respectful, reassuring, plain English.
+Every page carries the emergency / not-a-substitute disclaimer from src/lib/disclaimer.ts.
+Booking form collects ONLY: name, WhatsApp mobile, age, gender, visit type, optional one-line reason.
+DPDP Act 2023 consent line under the submit button.
+
+Local SEO: generateMetadata per route. JSON-LD as specified. Semantic HTML, one H1 per page, sitemap, robots, canonical, OG + Twitter via opengraph-image.tsx.
+
+Code conventions
+src/app routes, src/components/ui (shadcn), src/components/site, src/lib/supabase, src/lib/validation, src/lib/webhook, src/config/site.ts.
+Every server action returns { ok: true, data } | { ok: false, code, message }. No thrown errors reach the client.
+No any. No unused deps. Comments only for "why", never "what".
+Do NOT add: analytics, cookie banners, chat widgets, i18n libraries, a CMS, patient logins, payments.
+Admin is one Supabase-auth-protected /admin route for the doctor and receptionist only.
