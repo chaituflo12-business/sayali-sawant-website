@@ -20,6 +20,11 @@ export type ApptStatus =
   | "cancelled"
   | "completed"
   | "no_show";
+export type ReminderKind =
+  | "scan_day"
+  | "injection_day"
+  | "review_visit"
+  | "custom";
 
 export type Database = {
   public: {
@@ -98,6 +103,12 @@ export type Database = {
           source: string;
           created_at: string;
           updated_at: string;
+          report_ready_at: string | null;
+          review_requested_at: string | null;
+          next_visit_suggested_at: string | null;
+          no_show_followup_at: string | null;
+          hold_expires_at: string | null;
+          opted_out: boolean;
         };
         Insert: {
           id?: string;
@@ -115,6 +126,12 @@ export type Database = {
           source?: string;
           created_at?: string;
           updated_at?: string;
+          report_ready_at?: string | null;
+          review_requested_at?: string | null;
+          next_visit_suggested_at?: string | null;
+          no_show_followup_at?: string | null;
+          hold_expires_at?: string | null;
+          opted_out?: boolean;
         };
         Update: {
           id?: string;
@@ -132,6 +149,12 @@ export type Database = {
           source?: string;
           created_at?: string;
           updated_at?: string;
+          report_ready_at?: string | null;
+          review_requested_at?: string | null;
+          next_visit_suggested_at?: string | null;
+          no_show_followup_at?: string | null;
+          hold_expires_at?: string | null;
+          opted_out?: boolean;
         };
         Relationships: [];
       };
@@ -214,6 +237,113 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      waitlist: {
+        Row: {
+          id: string;
+          patient_name: string;
+          whatsapp_e164: string;
+          preferred_date: string;
+          visit_type: VisitType;
+          opted_out: boolean;
+          notified_at: string | null;
+          hold_expires_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          patient_name: string;
+          whatsapp_e164: string;
+          preferred_date: string;
+          visit_type: VisitType;
+          opted_out?: boolean;
+          notified_at?: string | null;
+          hold_expires_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          patient_name?: string;
+          whatsapp_e164?: string;
+          preferred_date?: string;
+          visit_type?: VisitType;
+          opted_out?: boolean;
+          notified_at?: string | null;
+          hold_expires_at?: string | null;
+        };
+        Relationships: [];
+      };
+      cycle_reminders: {
+        Row: {
+          id: string;
+          whatsapp_e164: string;
+          patient_name: string;
+          kind: ReminderKind;
+          remind_on: string;
+          remind_at: string;
+          note: string | null;
+          created_by: string | null;
+          sent_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          whatsapp_e164: string;
+          patient_name: string;
+          kind: ReminderKind;
+          remind_on: string;
+          remind_at?: string;
+          note?: string | null;
+          created_by?: string | null;
+          sent_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          whatsapp_e164?: string;
+          patient_name?: string;
+          kind?: ReminderKind;
+          remind_on?: string;
+          remind_at?: string;
+          note?: string | null;
+          sent_at?: string | null;
+        };
+        Relationships: [];
+      };
+      message_log: {
+        Row: {
+          id: number;
+          whatsapp_e164: string;
+          template: string;
+          appointment_id: string | null;
+          make_execution_id: string | null;
+          status: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: number;
+          whatsapp_e164: string;
+          template: string;
+          appointment_id?: string | null;
+          make_execution_id?: string | null;
+          status?: string;
+          created_at?: string;
+        };
+        Update: {
+          status?: string;
+          make_execution_id?: string | null;
+        };
+        Relationships: [];
+      };
+      opt_outs: {
+        Row: {
+          whatsapp_e164: string;
+          created_at: string;
+        };
+        Insert: {
+          whatsapp_e164: string;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -272,11 +402,77 @@ export type Database = {
         Args: { batch_size?: number };
         Returns: Database["public"]["Tables"]["webhook_outbox"]["Row"][];
       };
+      create_hold_appointment: {
+        Args: {
+          p_slot_id: string;
+          p_patient_name: string;
+          p_whatsapp_e164: string;
+          p_age: number;
+          p_gender: GenderT;
+          p_visit_type: VisitType;
+          p_source: string;
+          p_hold_hours?: number;
+        };
+        Returns: Json;
+      };
+      record_message_status: {
+        Args: {
+          p_whatsapp: string;
+          p_template: string;
+          p_status: string;
+          p_make_execution_id?: string | null;
+          p_appointment_ref?: string | null;
+          p_opt_out?: boolean;
+        };
+        Returns: Json;
+      };
+      join_waitlist: {
+        Args: {
+          p_patient_name: string;
+          p_whatsapp_e164: string;
+          p_preferred_date: string;
+          p_visit_type: VisitType;
+        };
+        Returns: Json;
+      };
+      get_no_shows_today: {
+        Args: Record<string, never>;
+        Returns: Json;
+      };
+      mark_no_show_followed_up: {
+        Args: { p_ref: string };
+        Returns: Json;
+      };
+      get_pending_waitlist: {
+        Args: { p_date: string };
+        Returns: Json;
+      };
+      emit_due_cycle_reminders: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
+      emit_daily_digest: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
+      expire_holds: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
+      offer_slot_to_waitlist: {
+        Args: { p_slot_id: string };
+        Returns: undefined;
+      };
+      invoke_deliver_webhooks: {
+        Args: Record<string, never>;
+        Returns: number | null;
+      };
     };
     Enums: {
       appt_status: ApptStatus;
       visit_type: VisitType;
       gender_t: GenderT;
+      reminder_kind: ReminderKind;
     };
   };
 };
