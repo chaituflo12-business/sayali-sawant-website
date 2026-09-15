@@ -6,7 +6,16 @@ export const SPECIALITY_LINE =
 export const PRACTICE_START_YEAR = 2017;
 export const MMC_REG_NO = "2017/08/3926";
 
-export const QUALIFICATIONS = [
+export type Qualification = {
+  degree: string;
+  /** The body that confers the degree. */
+  institution: string;
+  /** Where the training or residency was done, when it differs. */
+  trainedAt?: string;
+  year: number;
+};
+
+export const QUALIFICATIONS: ReadonlyArray<Qualification> = [
   {
     degree: "MBBS",
     institution: "Maharashtra University of Health Sciences, Nashik",
@@ -15,9 +24,10 @@ export const QUALIFICATIONS = [
   {
     degree: "DNB Obstetrics & Gynaecology",
     institution: "National Board of Examinations",
+    trainedAt: "KEM Hospital, Pune",
     year: 2020,
   },
-] as const;
+];
 
 export const LOCALITY = "Goregaon West";
 export const CITY = "Mumbai";

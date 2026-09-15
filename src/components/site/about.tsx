@@ -14,8 +14,8 @@ export function About() {
               {DOCTOR_NAME} is a Consultant Obstetrician and Gynaecologist and
               IVF/Infertility Specialist practising in Goregaon West, Mumbai. She
               completed her MBBS at Maharashtra University of Health Sciences,
-              Nashik in 2017 and her DNB in Obstetrics & Gynaecology from the
-              National Board of Examinations in 2020. She is registered with the
+              Nashik in 2017, and her DNB in Obstetrics & Gynaecology in 2020,
+              training at KEM Hospital, Pune. She is registered with the
               Maharashtra Medical Council (Reg. No. {MMC_REG_NO}).
             </p>
             <p>
@@ -39,6 +39,9 @@ export function About() {
                 className="border-b border-border py-3 last:border-0 last:pb-0 first:pt-0"
               >
                 <p className="font-display text-base text-ink">{item.degree}</p>
+                {item.trainedAt ? (
+                  <p className="mt-1 text-sm text-ink">{item.trainedAt}</p>
+                ) : null}
                 <p className="mt-1 text-sm text-muted">
                   {item.institution} ({item.year})
                 </p>

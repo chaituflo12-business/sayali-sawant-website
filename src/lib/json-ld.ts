@@ -111,6 +111,10 @@ export function homeJsonLd(hours: OpdDay[] = OPD_HOURS) {
           name: "Maharashtra Medical Council Registration",
           value: MMC_REG_NO,
         },
+        alumniOf: QUALIFICATIONS.map((q) => ({
+          "@type": "Organization",
+          name: q.trainedAt ?? q.institution,
+        })),
         hasCredential: QUALIFICATIONS.map((q) => ({
           "@type": "EducationalOccupationalCredential",
           credentialCategory: q.degree,

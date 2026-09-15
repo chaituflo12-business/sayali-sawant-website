@@ -48,8 +48,8 @@ export default function IvfSpecialistGoregaonWestPage() {
           </p>
           <p>
             She completed MBBS at Maharashtra University of Health Sciences,
-            Nashik (2017) and DNB Obstetrics & Gynaecology at the National
-            Board of Examinations (2020). She is registered with the Maharashtra
+            Nashik (2017) and DNB Obstetrics & Gynaecology in 2020, training
+            at KEM Hospital, Pune. She is registered with the Maharashtra
             Medical Council (Reg. No. {MMC_REG_NO}).
           </p>
           <h2 className="font-display pt-2 text-xl text-ink">
