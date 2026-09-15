@@ -16,7 +16,7 @@ import {
   visitTypeLabels,
   visitTypeValues,
 } from "@/lib/validation/appointment";
-import { GOOGLE_MAPS_DIR_URL } from "@/config/site";
+import { GOOGLE_MAPS_DIR_URL, telHref, whatsappHref } from "@/config/site";
 import { ConfirmationCard } from "@/components/booking/confirmation-card";
 import { BrandMark } from "@/components/site/brand-mark";
 import { WaitlistForm } from "@/components/booking/waitlist-form";
@@ -60,6 +60,7 @@ export function BookingFlow({
   const [confirmation, setConfirmation] = useState<BookedAppointment | null>(
     null,
   );
+  const [sendOnWhatsApp, setSendOnWhatsApp] = useState(false);
 
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
@@ -147,6 +148,10 @@ export function BookingFlow({
         await refetchSelectedDay();
         return;
       }
+      if (result.code === "NOT_CONFIGURED") {
+        setSendOnWhatsApp(true);
+        return;
+      }
       setFormError(result.message);
       return;
     }
@@ -155,6 +160,67 @@ export function BookingFlow({
 
   if (confirmation) {
     return <ConfirmationCard appointment={confirmation} />;
+  }
+
+  // Online booking needs a database. Until one is connected, hand the patient
+  // everything they just typed as a WhatsApp message so the visit is still
+  // requested rather than lost at the last step.
+  function requestMessage(): string {
+    const when =
+      selectedDate && selectedSlot
+        ? `${dayLabel(selectedDate)} at ${formatIstTime(new Date(selectedSlot.startsAt))}`
+        : "the next available time";
+    const lines = [
+      "Hello, I would like to book an OPD appointment with Dr. Sayali Sawant.",
+      "",
+      `Name: ${name}`,
+      `Age: ${age}`,
+      `Preferred time: ${when} (IST)`,
+      `Visit type: ${visitTypeLabels[visitType]}`,
+    ];
+    if (reason.trim()) lines.push(`Reason: ${reason.trim()}`);
+    return lines.join(`
+`);
+  }
+
+  if (sendOnWhatsApp) {
+    return (
+      <div className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
+        <h3 className="font-display text-lg text-ink">
+          Send your request on WhatsApp
+        </h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          Instant online booking is not switched on yet. Your details are ready
+          to send as a message, and the clinic will confirm your time.
+        </p>
+        <pre className="mt-4 overflow-x-auto whitespace-pre-wrap rounded-xl bg-primary-soft p-4 text-sm text-ink">
+          {requestMessage()}
+        </pre>
+        <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+          <a
+            href={whatsappHref(requestMessage())}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(buttonVariants({ variant: "whatsapp" }), "flex-1")}
+          >
+            Send on WhatsApp
+          </a>
+          <a
+            href={telHref()}
+            className={cn(buttonVariants({ variant: "secondary" }), "flex-1")}
+          >
+            Call the clinic
+          </a>
+        </div>
+        <button
+          type="button"
+          onClick={() => setSendOnWhatsApp(false)}
+          className={cn(buttonVariants({ variant: "ghost" }), "mt-2 w-full")}
+        >
+          Change my details
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -405,7 +471,16 @@ export function BookingFlow({
             </p>
           )}
           {formError ? (
-            <p className="text-sm text-error">{formError}</p>
+            <div className="space-y-2">
+              <p className="text-sm text-error">{formError}</p>
+              <button
+                type="button"
+                onClick={() => setSendOnWhatsApp(true)}
+                className="text-sm font-medium text-primary underline underline-offset-2"
+              >
+                Send this request on WhatsApp instead
+              </button>
+            </div>
           ) : null}
           <div className="flex gap-2">
             <button
