@@ -17,8 +17,6 @@ export const QUALIFICATIONS = [
   },
 ] as const;
 
-export const PRIOR_CENTRES = ["Nova IVF Fertility", "Indira IVF"] as const;
-
 export const LOCALITY = "Goregaon West";
 export const CITY = "Mumbai";
 export const PINCODE = "400104";

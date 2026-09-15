@@ -5,7 +5,7 @@ import { Reveal } from "@/components/site/reveal";
 import { JsonLd } from "@/components/site/json-ld";
 import { breadcrumbJsonLd } from "@/lib/json-ld";
 import { buttonVariants, cn } from "@/lib/utils";
-import { DOCTOR_NAME, PRIOR_CENTRES } from "@/config/site";
+import { DOCTOR_NAME, MMC_REG_NO } from "@/config/site";
 
 const TITLE = "IVF Specialist in Goregaon West | Dr. Sayali Sawant";
 const DESCRIPTION =
@@ -49,11 +49,8 @@ export default function IvfSpecialistGoregaonWestPage() {
           <p>
             She completed MBBS at Maharashtra University of Health Sciences,
             Nashik (2017) and DNB Obstetrics & Gynaecology at the National
-            Board of Examinations (2020). Before independent OPD practice she
-            worked at {PRIOR_CENTRES[0]} and {PRIOR_CENTRES[1]}. Those roles
-            involved infertility evaluation and assisted-reproduction
-            counselling — the same areas covered in this clinic&apos;s fertility
-            visits.
+            Board of Examinations (2020). She is registered with the Maharashtra
+            Medical Council (Reg. No. {MMC_REG_NO}).
           </p>
           <h2 className="font-display pt-2 text-xl text-ink">
             What a fertility consultation includes

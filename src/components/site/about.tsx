@@ -1,9 +1,4 @@
-import {
-  DOCTOR_NAME,
-  MMC_REG_NO,
-  PRIOR_CENTRES,
-  QUALIFICATIONS,
-} from "@/config/site";
+import { DOCTOR_NAME, MMC_REG_NO, QUALIFICATIONS } from "@/config/site";
 import { Reveal } from "@/components/site/reveal";
 
 export function About() {
@@ -22,11 +17,6 @@ export function About() {
               Nashik in 2017 and her DNB in Obstetrics & Gynaecology from the
               National Board of Examinations in 2020. She is registered with the
               Maharashtra Medical Council (Reg. No. {MMC_REG_NO}).
-            </p>
-            <p>
-              Before starting independent outpatient practice, she worked at{" "}
-              {PRIOR_CENTRES[0]} and {PRIOR_CENTRES[1]}, where her work included
-              infertility evaluation and assisted-reproduction counselling.
             </p>
             <p>
               Her consultation style is unhurried and evidence-based. She
@@ -54,14 +44,6 @@ export function About() {
                 </p>
               </li>
             ))}
-            <li className="pt-3">
-              <p className="font-display text-base text-ink">
-                Prior fertility-centre work
-              </p>
-              <p className="mt-1 text-sm text-muted">
-                {PRIOR_CENTRES.join(" · ")}
-              </p>
-            </li>
           </ol>
         </Reveal>
       </div>
