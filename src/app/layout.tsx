@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { Lora, Open_Sans } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/site/providers";
 import { HOME_DESCRIPTION, HOME_TITLE, SITE_URL } from "@/config/site";
 
-const inter = Inter({
+const openSans = Open_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-open-sans",
   display: "swap",
 });
 
-const manrope = Manrope({
+const lora = Lora({
   subsets: ["latin"],
-  variable: "--font-manrope",
+  variable: "--font-lora",
   display: "swap",
 });
 
@@ -45,9 +45,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${openSans.variable} ${lora.variable}`}>
       <body
-        className={`${inter.variable} ${manrope.variable} bg-background font-sans text-ink antialiased`}
+        className="bg-background font-sans text-ink antialiased"
       >
         <Providers>{children}</Providers>
       </body>

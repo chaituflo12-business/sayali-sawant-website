@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, Phone, X } from "lucide-react";
-import { DOCTOR_NAME, SPECIALITY_LINE, telHref, whatsappHref } from "@/config/site";
+import { telHref, whatsappHref } from "@/config/site";
 import { buttonVariants } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { useBooking } from "@/components/site/booking-provider";
 import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
+import { BrandLockup } from "@/components/site/brand-mark";
 
 const NAV = [
   { href: "/#about", label: "About" },
@@ -24,13 +25,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-        <Link href="/" className="min-h-11 min-w-0">
-          <span className="font-display block text-base leading-tight text-ink md:text-lg">
-            {DOCTOR_NAME}
-          </span>
-          <span className="block text-xs text-muted md:text-sm">
-            {SPECIALITY_LINE}
-          </span>
+        <Link href="/" className="min-h-11 min-w-0" aria-label="Home">
+          <BrandLockup size={40} animate />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">

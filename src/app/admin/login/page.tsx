@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import { buttonVariants, cn } from "@/lib/utils";
+import { BrandMark } from "@/components/site/brand-mark";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -55,6 +56,7 @@ export default function AdminLoginPage() {
 
   return (
     <div className="mx-auto max-w-md">
+      <BrandMark size={56} animate className="mb-4" />
       <h1 className="font-display text-2xl text-ink">Staff sign in</h1>
       <p className="mt-2 text-sm text-muted">
         Enter the allow-listed email. You will receive a one-time code.

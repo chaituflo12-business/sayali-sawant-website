@@ -21,7 +21,52 @@ export default function TwitterImage() {
           color: "#2b1a36",
         }}
       >
-        <div style={{ fontSize: 28 }}>Consultant Obstetrician</div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 20,
+          }}
+        >
+          <div
+            style={{
+              width: 96,
+              height: 96,
+              borderRadius: 48,
+              background: "#2b1a36",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                right: -18,
+                bottom: 56,
+                width: 58,
+                height: 58,
+                borderRadius: 29,
+                background: "#ffafcc",
+                opacity: 0.92,
+              }}
+            />
+            <div
+              style={{
+                fontSize: 44,
+                fontWeight: 800,
+                color: "#ffffff",
+                letterSpacing: -3,
+                marginTop: 3,
+              }}
+            >
+              SS
+            </div>
+          </div>
+          <div style={{ fontSize: 28 }}>Consultant Obstetrician</div>
+        </div>
         <div style={{ fontSize: 64, fontWeight: 700, marginTop: 12 }}>
           Dr. Sayali Sawant
         </div>

@@ -1,19 +1,19 @@
-import { Reveal } from "@/components/site/reveal";
 import {
   DOCTOR_NAME,
   MMC_REG_NO,
   PRIOR_CENTRES,
   QUALIFICATIONS,
 } from "@/config/site";
+import { Reveal } from "@/components/site/reveal";
 
 export function About() {
   return (
     <section id="about" className="scroll-mt-24 bg-surface-warm py-14">
-      <Reveal className="mx-auto max-w-6xl px-4">
+      <div className="mx-auto max-w-6xl px-4">
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           About {DOCTOR_NAME}
         </h2>
-        <div className="mt-6 grid gap-8 md:grid-cols-[1.4fr_1fr]">
+        <Reveal className="mt-6 grid gap-8 md:grid-cols-[1.4fr_1fr]">
           <article className="space-y-4 text-sm leading-relaxed text-muted">
             <p>
               {DOCTOR_NAME} is a Consultant Obstetrician and Gynaecologist and
@@ -63,8 +63,8 @@ export function About() {
               </p>
             </li>
           </ol>
-        </div>
-      </Reveal>
+        </Reveal>
+      </div>
     </section>
   );
 }

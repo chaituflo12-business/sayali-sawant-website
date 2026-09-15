@@ -1,5 +1,5 @@
 import { CalendarCheck, MessageCircle, Stethoscope } from "lucide-react";
-import { Reveal } from "@/components/site/reveal";
+import { Reveal, RevealGroup } from "@/components/site/reveal";
 
 const STEPS = [
   {
@@ -23,16 +23,21 @@ export function VisitSteps() {
   return (
     <section className="py-14">
       <div className="mx-auto max-w-6xl px-4">
-        <h2 className="font-display text-2xl text-ink md:text-3xl">
-          How a visit works
-        </h2>
-        <ol className="mt-8 grid gap-4 md:grid-cols-3">
+        <Reveal>
+          <h2 className="font-display text-2xl text-ink md:text-3xl">
+            How a visit works
+          </h2>
+        </Reveal>
+        <RevealGroup
+          as="ol"
+          itemAs="li"
+          step={180}
+          className="mt-8 grid gap-4 md:grid-cols-3"
+        >
           {STEPS.map((step, index) => (
-            <Reveal
-              as="li"
+            <div
               key={step.title}
-              delay={index * 120}
-              className="rounded-xl border border-border bg-surface p-5 shadow-sm"
+              className="h-full rounded-xl border border-border bg-surface p-5 shadow-sm"
             >
               <step.icon className="h-5 w-5 text-primary" aria-hidden />
               <p className="mt-3 text-xs font-medium uppercase tracking-wide text-primary">
@@ -44,9 +49,9 @@ export function VisitSteps() {
               <p className="mt-2 text-sm leading-relaxed text-muted">
                 {step.body}
               </p>
-            </Reveal>
+            </div>
           ))}
-        </ol>
+        </RevealGroup>
       </div>
     </section>
   );

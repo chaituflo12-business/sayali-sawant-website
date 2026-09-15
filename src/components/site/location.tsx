@@ -18,8 +18,8 @@ export function Location() {
 
   return (
     <section id="location" className="scroll-mt-24 bg-background py-14">
-      <Reveal className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-2">
-        <div>
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-2">
+        <Reveal>
           <h2 className="font-display text-2xl text-ink md:text-3xl">
             Women&apos;s health clinic, Goregaon West
           </h2>
@@ -41,9 +41,13 @@ export function Location() {
           >
             Get directions
           </a>
-        </div>
+        </Reveal>
 
-        <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
+        <Reveal
+          variant="scale"
+          delay={160}
+          className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm"
+        >
           {showMap ? (
             <iframe
               title={`Map of Dr. Sayali Sawant clinic, ${LOCALITY}`}
@@ -66,8 +70,8 @@ export function Location() {
               </span>
             </button>
           )}
-        </div>
-      </Reveal>
+        </Reveal>
+      </div>
     </section>
   );
 }

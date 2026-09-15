@@ -18,6 +18,7 @@ import {
 } from "@/lib/validation/appointment";
 import { GOOGLE_MAPS_DIR_URL } from "@/config/site";
 import { ConfirmationCard } from "@/components/booking/confirmation-card";
+import { BrandMark } from "@/components/site/brand-mark";
 import { WaitlistForm } from "@/components/booking/waitlist-form";
 
 type Step = 1 | 2 | 3;
@@ -223,7 +224,10 @@ export function BookingFlow({
             </p>
           ) : null}
           {loadingSlots ? (
-            <p className="text-sm text-muted">Loading times…</p>
+            <p className="flex items-center gap-3 text-sm text-muted">
+              <BrandMark size={28} className="mark-pulse" title="Loading" />
+              Loading times…
+            </p>
           ) : (
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
               {slots.map((slot) => {

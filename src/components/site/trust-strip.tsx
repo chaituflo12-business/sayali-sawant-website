@@ -1,10 +1,10 @@
-import { RevealGroup } from "@/components/site/reveal";
 import {
   LANGUAGES,
   MMC_REG_NO,
   PRACTICE_START_YEAR,
   yearsInPractice,
 } from "@/config/site";
+import { RevealGroup } from "@/components/site/reveal";
 
 export function TrustStrip() {
   const years = yearsInPractice();
@@ -30,7 +30,7 @@ export function TrustStrip() {
   return (
     <section aria-label="Credentials" className="border-y border-border bg-background">
       <RevealGroup
-        step={60}
+        step={110}
         className="mx-auto grid max-w-6xl gap-3 px-4 py-8 sm:grid-cols-2 lg:grid-cols-4"
       >
         {tiles.map((tile) => (

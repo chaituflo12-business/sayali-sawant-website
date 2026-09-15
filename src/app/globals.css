@@ -19,6 +19,10 @@
   --error: #ab003f;
   --border: #e0d2e9;
   --focus-ring: #0082fb;
+  /* Real font stacks. @theme inline does not emit variables, so anything
+     that reads var(--font-*) in plain CSS must point here. */
+  --font-body: var(--font-open-sans), "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-lora), Lora, Georgia, "Times New Roman", serif;
 }
 
 @theme {
@@ -96,8 +100,8 @@
   --color-error: var(--error);
   --color-border: var(--border);
   --color-focus-ring: var(--focus-ring);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
   --shadow-sm: 0 1px 2px rgb(43 26 54 / 0.06);
 }
 
@@ -108,14 +112,14 @@ html {
 body {
   background: var(--background);
   color: var(--ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
 }
 
 h1,
 h2,
 h3,
 .font-display {
-  font-family: var(--font-display);
+  font-family: var(--font-heading);
 }
 
 :focus-visible {
@@ -141,31 +145,187 @@ h3,
   color: var(--ink);
 }
 
-/* Scroll reveal */
+/* ---- Motion: scroll reveal, hero float, button press ---- */
+:root {
+  --reveal-duration: 760ms;
+  --reveal-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
 [data-reveal] {
   transition-property: opacity, transform;
-  transition-duration: 420ms;
-  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
+  transition-duration: var(--reveal-duration);
+  transition-timing-function: var(--reveal-ease);
 }
-[data-reveal][data-shown="false"] { opacity: 0; }
-[data-reveal="fade-up"][data-shown="false"] { transform: translateY(14px); }
-[data-reveal="scale"][data-shown="false"] { transform: scale(0.97); }
-[data-reveal][data-shown="true"] { opacity: 1; transform: none; }
+[data-reveal][data-shown="false"] {
+  opacity: 0;
+}
+[data-reveal="fade-up"][data-shown="false"] {
+  transform: translateY(28px);
+}
+[data-reveal="scale"][data-shown="false"] {
+  transform: scale(0.95) translateY(12px);
+}
+[data-reveal][data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+/* No JavaScript: never hide content. */
+@media (scripting: none) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
 
-/* Hero photo: slow float, decorative only */
+/* Hero entrance: staged, once, on load */
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes hero-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.hero-in,
+.hero-in-scale {
+  opacity: 0;
+  animation-duration: 820ms;
+  animation-timing-function: var(--reveal-ease);
+  animation-fill-mode: both;
+}
+.hero-in {
+  animation-name: hero-in;
+}
+.hero-in-scale {
+  animation-name: hero-in-scale;
+}
+@media (scripting: none) {
+  .hero-in,
+  .hero-in-scale {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 @keyframes float-soft {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
 }
-.animate-float-soft { animation: float-soft 6s ease-in-out infinite; }
+.animate-float-soft {
+  animation: float-soft 7s ease-in-out infinite;
+}
+.animate-float-soft-slow {
+  animation: float-soft 9s ease-in-out infinite;
+  animation-delay: -3s;
+}
 
-/* Button press */
-.press:active { transform: scale(0.98); }
-.press { transition: transform 120ms ease, background-color 150ms ease; }
+.press {
+  transition-property: transform, background-color, color, border-color;
+  transition-duration: 140ms;
+  transition-timing-function: ease-out;
+}
+.press:active:not(:disabled) {
+  transform: scale(0.98);
+}
 
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal] { transition: none !important; opacity: 1 !important; transform: none !important; }
-  .animate-float-soft { animation: none; }
-  .press:active { transform: none; }
+  [data-reveal] {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .animate-float-soft,
+  .animate-float-soft-slow {
+    animation: none !important;
+  }
+  .hero-in,
+  .hero-in-scale {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .press:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ---- Brand mark: entrance once on load, pulse while loading ---- */
+@keyframes mark-disc-in {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes mark-dot-in {
+  from { transform: translate(14px, -14px); opacity: 0; }
+  to { transform: translate(0, 0); opacity: 0.92; }
+}
+@keyframes mark-text-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.mark-anim .mark-disc,
+.mark-anim .mark-dot,
+.mark-anim .mark-text {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-timing-function: var(--reveal-ease);
+  animation-fill-mode: both;
+}
+.mark-anim .mark-disc { animation: mark-disc-in 620ms; }
+.mark-anim .mark-dot { animation: mark-dot-in 700ms 260ms; }
+.mark-anim .mark-text { animation: mark-text-in 520ms 420ms; }
+
+@keyframes mark-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.mark-pulse {
+  animation: mark-pulse 1.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark-anim .mark-disc,
+  .mark-anim .mark-dot,
+  .mark-anim .mark-text,
+  .mark-pulse {
+    animation: none !important;
+    opacity: 1;
+    transform: none !important;
+  }
+  .mark-anim .mark-dot { opacity: 0.92; }
+}
+
+/* ---- Service cards: opaque pastel tiles with a gentle lift ---- */
+.service-card {
+  box-shadow: 0 1px 2px rgb(43 26 54 / 0.05);
+  transition: transform 220ms var(--reveal-ease), box-shadow 220ms var(--reveal-ease);
+}
+@media (hover: hover) {
+  .service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgb(43 26 54 / 0.1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .service-card,
+  .service-card:hover {
+    transform: none;
+    transition: none;
+  }
 }

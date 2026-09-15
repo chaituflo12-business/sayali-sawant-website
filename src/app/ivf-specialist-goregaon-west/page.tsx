@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteShell } from "@/components/site/site-shell";
+import { Reveal } from "@/components/site/reveal";
 import { JsonLd } from "@/components/site/json-ld";
 import { breadcrumbJsonLd } from "@/lib/json-ld";
 import { buttonVariants, cn } from "@/lib/utils";
 import { DOCTOR_NAME, PRIOR_CENTRES } from "@/config/site";
-import { Reveal } from "@/components/site/reveal";
 
 const TITLE = "IVF Specialist in Goregaon West | Dr. Sayali Sawant";
 const DESCRIPTION =

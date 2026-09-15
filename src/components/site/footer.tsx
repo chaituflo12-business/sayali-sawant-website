@@ -6,6 +6,7 @@ import {
   OPD_HOURS,
 } from "@/config/site";
 import { formatSession } from "@/lib/hours";
+import { BrandMark } from "@/components/site/brand-mark";
 
 export function Footer() {
   const weekdayLine = OPD_HOURS.filter((d) => !d.closed)
@@ -17,6 +18,7 @@ export function Footer() {
     <footer className="border-t border-border bg-surface pb-24 md:pb-8">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-3">
         <div>
+          <BrandMark size={44} className="mb-3" />
           <p className="font-display text-lg text-ink">{DOCTOR_NAME}</p>
           <p className="mt-1 text-sm text-muted">
             Maharashtra Medical Council Reg. No. {MMC_REG_NO}

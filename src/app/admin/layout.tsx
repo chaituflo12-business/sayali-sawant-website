@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ToastProvider } from "@/components/ui/toast";
+import { BrandMark } from "@/components/site/brand-mark";
 
 const LINKS = [
   { href: "/admin", label: "Today" },
@@ -22,7 +23,10 @@ export default function AdminLayout({
       <div className="min-h-screen bg-background">
         <header className="border-b border-border bg-surface">
           <div className="mx-auto flex max-w-5xl flex-col gap-2 px-4 py-3">
-            <p className="font-display text-base text-ink">OPD admin</p>
+            <p className="flex items-center gap-2">
+              <BrandMark size={28} />
+              <span className="font-display text-base text-ink">OPD admin</span>
+            </p>
             <nav className="flex gap-1 overflow-x-auto" aria-label="Admin">
               {LINKS.map((link) => (
                 <Link

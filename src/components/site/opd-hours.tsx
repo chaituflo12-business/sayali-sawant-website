@@ -1,7 +1,7 @@
 import { OPD_HOURS } from "@/config/site";
 import type { DaySummary, SlotSummary } from "@/lib/slot-types";
 import { formatSession } from "@/lib/hours";
-import { Reveal } from "@/components/site/reveal";
+import { Reveal, RevealGroup } from "@/components/site/reveal";
 
 function statusClass(status: DaySummary["status"]) {
   if (status === "available") return "border-accent bg-accent-soft text-ink";
@@ -20,7 +20,8 @@ function statusLabel(status: DaySummary["status"]) {
 export function OpdHours({ summary }: { summary: SlotSummary }) {
   return (
     <section id="opd-hours" className="scroll-mt-24 py-14">
-      <Reveal className="mx-auto max-w-6xl px-4">
+      <div className="mx-auto max-w-6xl px-4">
+        <Reveal>
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           OPD hours in Goregaon West
         </h2>
@@ -56,26 +57,34 @@ export function OpdHours({ summary }: { summary: SlotSummary }) {
             </tbody>
           </table>
         </div>
+        </Reveal>
 
-        <h3 className="font-display mt-8 text-lg text-ink">Next 7 days</h3>
-        <ul className="mt-3 grid grid-cols-7 gap-2">
+        <Reveal delay={120}>
+          <h3 className="font-display mt-8 text-lg text-ink">Next 7 days</h3>
+        </Reveal>
+        <RevealGroup
+          as="ul"
+          itemAs="li"
+          step={60}
+          className="mt-3 grid grid-cols-7 gap-2"
+        >
           {summary.days.map((day) => {
             const label = new Date(`${day.date}T00:00:00+05:30`).toLocaleDateString(
               "en-GB",
               { weekday: "short", day: "numeric", timeZone: "Asia/Kolkata" },
             );
             return (
-              <li
+              <div
                 key={day.date}
-                className={`rounded-xl border px-1 py-3 text-center text-xs ${statusClass(day.status)}`}
+                className={`h-full rounded-xl border px-1 py-3 text-center text-xs ${statusClass(day.status)}`}
               >
                 <span className="block font-medium">{label}</span>
                 <span className="mt-1 block">{statusLabel(day.status)}</span>
-              </li>
+              </div>
             );
           })}
-        </ul>
-      </Reveal>
+        </RevealGroup>
+      </div>
     </section>
   );
 }
