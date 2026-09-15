@@ -9,6 +9,7 @@ import {
   LOCALITY,
   MMC_REG_NO,
   OPD_HOURS,
+  type OpdDay,
   PHONE,
   PINCODE,
   QUALIFICATIONS,
@@ -27,8 +28,8 @@ const WEEKDAY_NAMES = [
   "Saturday",
 ] as const;
 
-function openingHoursSpecification() {
-  return OPD_HOURS.flatMap((day) =>
+function openingHoursSpecification(hours: OpdDay[]) {
+  return hours.flatMap((day) =>
     day.sessions.map((session) => ({
       "@type": "OpeningHoursSpecification",
       dayOfWeek: WEEKDAY_NAMES[day.weekday],
@@ -38,7 +39,7 @@ function openingHoursSpecification() {
   );
 }
 
-export function homeJsonLd() {
+export function homeJsonLd(hours: OpdDay[] = OPD_HOURS) {
   const clinicId = `${SITE_URL}/#clinic`;
   const physicianId = `${SITE_URL}/#physician`;
 
@@ -65,7 +66,7 @@ export function homeJsonLd() {
           latitude: GEO.latitude,
           longitude: GEO.longitude,
         },
-        openingHoursSpecification: openingHoursSpecification(),
+        openingHoursSpecification: openingHoursSpecification(hours),
         sameAs: sameAs(),
         availableLanguage: [...LANGUAGES],
         areaServed: [LOCALITY, CITY, ...CATCHMENT].map((name) => ({

@@ -1,4 +1,8 @@
-import { DOCTOR_NAME, SPECIALITY_LINE } from "@/config/site";
+import {
+  DOCTOR_NAME,
+  SPECIALITY_LINE,
+  SPECIALITY_SHORT,
+} from "@/config/site";
 import { cn } from "@/lib/utils";
 
 /**
@@ -79,8 +83,9 @@ export function BrandLockup({
           {DOCTOR_NAME}
         </span>
         {showLine ? (
-          <span className="block text-xs text-muted md:text-sm">
-            {SPECIALITY_LINE}
+          <span className="block text-xs leading-snug text-muted md:text-sm">
+            <span className="sm:hidden">{SPECIALITY_SHORT}</span>
+            <span className="hidden sm:inline">{SPECIALITY_LINE}</span>
           </span>
         ) : null}
       </span>

@@ -352,6 +352,14 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      get_opd_schedule: {
+        Args: Record<string, never>;
+        Returns: {
+          weekday: number;
+          start_time: string;
+          end_time: string;
+        }[];
+      };
       get_available_slots: {
         Args: { from_date: string; to_date: string };
         Returns: {

@@ -11,6 +11,7 @@ import { SiteShell } from "@/components/site/site-shell";
 import { JsonLd } from "@/components/site/json-ld";
 import { BookingCard } from "@/components/booking/booking-card";
 import { getSlotSummary } from "@/lib/slots";
+import { resolveOpdHours } from "@/lib/opd-hours";
 import { homeJsonLd } from "@/lib/json-ld";
 import { HOME_DESCRIPTION, HOME_TITLE } from "@/config/site";
 
@@ -23,16 +24,19 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const summary = await getSlotSummary();
+  const [summary, hours] = await Promise.all([
+    getSlotSummary(),
+    resolveOpdHours(),
+  ]);
 
   return (
     <SiteShell>
-      <JsonLd data={homeJsonLd()} />
+      <JsonLd data={homeJsonLd(hours)} />
       <Hero summary={summary} />
       <TrustStrip />
       <Services />
       <VisitSteps />
-      <OpdHours summary={summary} />
+      <OpdHours summary={summary} hours={hours} />
       <BookingCard />
       <Location />
       <About />

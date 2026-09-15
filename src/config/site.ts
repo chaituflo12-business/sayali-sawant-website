@@ -1,4 +1,6 @@
 export const DOCTOR_NAME = "Dr. Sayali Sawant";
+export const SPECIALITY_SHORT = "Obstetrician & Gynaecologist";
+
 export const SPECIALITY_LINE =
   "Obstetrician · Gynaecologist · IVF Specialist";
 export const PRACTICE_START_YEAR = 2017;
@@ -32,22 +34,26 @@ export const CATCHMENT = [
 export const LANGUAGES = ["English", "Hindi", "Marathi"] as const;
 
 export const CLINIC_ADDRESS =
-  "[Clinic address to be confirmed], Goregaon West, Mumbai 400104";
+  "Divya Jyothi Cooperative Housing Society, 25/4, Shastri Nagar Rd Number 2, Azad Nagar, Mitha Nagar, Goregaon West, Mumbai, Maharashtra 400104";
 
 export const LANDMARKS =
-  "Near [landmark to be confirmed], Goregaon West, Mumbai.";
+  "On Shastri Nagar Road Number 2, off Azad Nagar, Goregaon West.";
 
 export const PARKING_NOTE =
   "Street parking near the clinic. Confirm on WhatsApp before you arrive if you are driving.";
 
 export const NEAREST_STATION =
-  "Goregaon (Western line) and Goregaon Metro. Walking time depends on the final clinic address — use Get directions.";
+  "Goregaon station (Western line) and Goregaon Metro. Autos run to Shastri Nagar Road Number 2 — use Get directions.";
 
 export const GOOGLE_PLACE_ID = "PLACEHOLDER_GOOGLE_PLACE_ID";
 
 export const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(CLINIC_ADDRESS)}`;
 
-export const GOOGLE_MAPS_DIR_URL = `https://www.google.com/maps/dir/?api=1&destination_place_id=${GOOGLE_PLACE_ID}`;
+// A Place ID gives the most accurate pin, but until the Google Business
+// Profile is claimed the address query is the only link that actually works.
+export const GOOGLE_MAPS_DIR_URL = GOOGLE_PLACE_ID.startsWith("PLACEHOLDER")
+  ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(CLINIC_ADDRESS)}`
+  : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(CLINIC_ADDRESS)}&destination_place_id=${GOOGLE_PLACE_ID}`;
 
 export const GOOGLE_MAPS_EMBED_QUERY = encodeURIComponent(CLINIC_ADDRESS);
 
@@ -96,61 +102,37 @@ export const OPD_HOURS: OpdDay[] = [
     weekday: 1,
     label: "Monday",
     closed: false,
-    sessions: [
-      { start: "10:00", end: "13:00" },
-      { start: "17:30", end: "20:30" },
-    ],
-    breakLabel: "1:00 PM – 5:30 PM",
+    sessions: [{ start: "18:00", end: "20:00" }],
   },
   {
     weekday: 2,
     label: "Tuesday",
     closed: false,
-    sessions: [
-      { start: "10:00", end: "13:00" },
-      { start: "17:30", end: "20:30" },
-    ],
-    breakLabel: "1:00 PM – 5:30 PM",
+    sessions: [{ start: "18:00", end: "20:00" }],
   },
   {
     weekday: 3,
     label: "Wednesday",
     closed: false,
-    sessions: [
-      { start: "10:00", end: "13:00" },
-      { start: "17:30", end: "20:30" },
-    ],
-    breakLabel: "1:00 PM – 5:30 PM",
+    sessions: [{ start: "18:00", end: "20:00" }],
   },
   {
     weekday: 4,
     label: "Thursday",
     closed: false,
-    sessions: [
-      { start: "10:00", end: "13:00" },
-      { start: "17:30", end: "20:30" },
-    ],
-    breakLabel: "1:00 PM – 5:30 PM",
+    sessions: [{ start: "18:00", end: "20:00" }],
   },
   {
     weekday: 5,
     label: "Friday",
     closed: false,
-    sessions: [
-      { start: "10:00", end: "13:00" },
-      { start: "17:30", end: "20:30" },
-    ],
-    breakLabel: "1:00 PM – 5:30 PM",
+    sessions: [{ start: "18:00", end: "20:00" }],
   },
   {
     weekday: 6,
     label: "Saturday",
     closed: false,
-    sessions: [
-      { start: "10:00", end: "13:00" },
-      { start: "17:30", end: "20:30" },
-    ],
-    breakLabel: "1:00 PM – 5:30 PM",
+    sessions: [{ start: "18:00", end: "20:00" }],
   },
 ];
 

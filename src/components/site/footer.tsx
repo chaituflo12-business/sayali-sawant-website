@@ -3,16 +3,28 @@ import {
   CLINIC_ADDRESS,
   DOCTOR_NAME,
   MMC_REG_NO,
-  OPD_HOURS,
 } from "@/config/site";
 import { formatSession } from "@/lib/hours";
+import { resolveOpdHours } from "@/lib/opd-hours";
 import { BrandMark } from "@/components/site/brand-mark";
 
-export function Footer() {
-  const weekdayLine = OPD_HOURS.filter((d) => !d.closed)
-    .map((d) => `${d.label.slice(0, 3)} ${d.sessions.map(formatSession).join(", ")}`)
-    .slice(0, 1)
-    .join("");
+export async function Footer() {
+  const hours = await resolveOpdHours();
+  const open = hours.filter((d) => !d.closed);
+  const closed = hours.filter((d) => d.closed);
+  const dayRange =
+    open.length === 0
+      ? ""
+      : open.length === 1
+        ? open[0].label
+        : `${open[0].label.slice(0, 3)}–${open[open.length - 1].label.slice(0, 3)}`;
+  const timeLine = open[0]
+    ? open[0].sessions.map(formatSession).join(", ")
+    : "";
+  const closedLine =
+    closed.length === 0
+      ? ""
+      : ` ${closed.map((d) => d.label).join(", ")} closed.`;
 
   return (
     <footer className="border-t border-border bg-surface pb-24 md:pb-8">
@@ -25,7 +37,7 @@ export function Footer() {
           </p>
           <p className="mt-3 text-sm text-muted">{CLINIC_ADDRESS}</p>
           <p className="mt-2 text-sm text-muted">
-            Mon–Sat hours (IST): {weekdayLine}. Sunday closed.
+            {dayRange} hours (IST): {timeLine}.{closedLine}
           </p>
         </div>
         <div>

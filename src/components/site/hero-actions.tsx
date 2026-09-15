@@ -7,7 +7,7 @@ export function HeroActions({ directionsUrl }: { directionsUrl: string }) {
   const { scrollOrOpen } = useBooking();
 
   return (
-    <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+    <div id="hero-cta" className="mt-6 flex flex-col gap-3 sm:flex-row">
       <button
         type="button"
         onClick={scrollOrOpen}

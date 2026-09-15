@@ -27,7 +27,7 @@ export function Hero({ summary }: { summary: SlotSummary }) {
             {DOCTOR_NAME} · {LOCALITY}, {CITY}
           </p>
           <h1
-            className="hero-in font-display mt-2 text-3xl leading-tight text-ink md:text-4xl"
+            className="hero-in font-display mt-2 text-[1.7rem] leading-tight text-balance text-ink sm:text-3xl md:text-4xl"
             style={{ animationDelay: "180ms" }}
           >
             Obstetrician, Gynaecologist & IVF Specialist in Goregaon West,

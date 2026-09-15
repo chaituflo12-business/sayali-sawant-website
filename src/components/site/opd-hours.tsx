@@ -1,4 +1,4 @@
-import { OPD_HOURS } from "@/config/site";
+import type { OpdDay } from "@/config/site";
 import type { DaySummary, SlotSummary } from "@/lib/slot-types";
 import { formatSession } from "@/lib/hours";
 import { Reveal, RevealGroup } from "@/components/site/reveal";
@@ -17,7 +17,15 @@ function statusLabel(status: DaySummary["status"]) {
   return "Closed";
 }
 
-export function OpdHours({ summary }: { summary: SlotSummary }) {
+export function OpdHours({
+  summary,
+  hours,
+}: {
+  summary: SlotSummary;
+  hours: OpdDay[];
+}) {
+  const anyBreak = hours.some((day) => !day.closed && day.breakLabel);
+
   return (
     <section id="opd-hours" className="scroll-mt-24 py-14">
       <div className="mx-auto max-w-6xl px-4">
@@ -31,17 +39,19 @@ export function OpdHours({ summary }: { summary: SlotSummary }) {
         </p>
 
         <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-surface shadow-sm">
-          <table className="w-full min-w-[520px] text-left text-sm">
+          <table className="w-full text-left text-sm">
             <caption className="sr-only">Weekly OPD hours</caption>
             <thead className="border-b border-border bg-primary-soft">
               <tr>
                 <th className="px-4 py-3 font-medium text-ink">Day</th>
                 <th className="px-4 py-3 font-medium text-ink">Sessions</th>
-                <th className="px-4 py-3 font-medium text-ink">Break</th>
+                {anyBreak ? (
+                  <th className="px-4 py-3 font-medium text-ink">Break</th>
+                ) : null}
               </tr>
             </thead>
             <tbody>
-              {OPD_HOURS.map((day) => (
+              {hours.map((day) => (
                 <tr key={day.label} className="border-b border-border last:border-0">
                   <td className="px-4 py-3 font-medium text-ink">{day.label}</td>
                   <td className="px-4 py-3 text-muted">
@@ -49,9 +59,11 @@ export function OpdHours({ summary }: { summary: SlotSummary }) {
                       ? "Closed"
                       : day.sessions.map((s) => formatSession(s)).join(" · ")}
                   </td>
-                  <td className="px-4 py-3 text-muted">
-                    {day.closed ? "—" : day.breakLabel}
-                  </td>
+                  {anyBreak ? (
+                    <td className="px-4 py-3 text-muted">
+                      {day.closed || !day.breakLabel ? "—" : day.breakLabel}
+                    </td>
+                  ) : null}
                 </tr>
               ))}
             </tbody>
