@@ -11,13 +11,14 @@ import {
   PARKING_NOTE,
 } from "@/config/site";
 import { buttonVariants, cn } from "@/lib/utils";
+import { Reveal } from "@/components/site/reveal";
 
 export function Location() {
   const [showMap, setShowMap] = useState(false);
 
   return (
     <section id="location" className="scroll-mt-24 bg-background py-14">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-2">
+      <Reveal className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-2">
         <div>
           <h2 className="font-display text-2xl text-ink md:text-3xl">
             Women&apos;s health clinic, Goregaon West
@@ -66,7 +67,7 @@ export function Location() {
             </button>
           )}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

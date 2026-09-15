@@ -1,9 +1,10 @@
 import { FAQ_ITEMS } from "@/config/faq";
+import { Reveal } from "@/components/site/reveal";
 
 export function Faq() {
   return (
     <section id="faq" className="scroll-mt-24 bg-background py-14">
-      <div className="mx-auto max-w-3xl px-4">
+      <Reveal className="mx-auto max-w-3xl px-4">
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           Questions patients ask before booking
         </h2>
@@ -26,7 +27,7 @@ export function Faq() {
             </details>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

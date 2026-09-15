@@ -1,6 +1,7 @@
 import { OPD_HOURS } from "@/config/site";
 import type { DaySummary, SlotSummary } from "@/lib/slot-types";
 import { formatSession } from "@/lib/hours";
+import { Reveal } from "@/components/site/reveal";
 
 function statusClass(status: DaySummary["status"]) {
   if (status === "available") return "border-accent bg-accent-soft text-ink";
@@ -19,7 +20,7 @@ function statusLabel(status: DaySummary["status"]) {
 export function OpdHours({ summary }: { summary: SlotSummary }) {
   return (
     <section id="opd-hours" className="scroll-mt-24 py-14">
-      <div className="mx-auto max-w-6xl px-4">
+      <Reveal className="mx-auto max-w-6xl px-4">
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           OPD hours in Goregaon West
         </h2>
@@ -74,7 +75,7 @@ export function OpdHours({ summary }: { summary: SlotSummary }) {
             );
           })}
         </ul>
-      </div>
+      </Reveal>
     </section>
   );
 }

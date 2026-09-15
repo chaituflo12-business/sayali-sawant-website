@@ -1,4 +1,5 @@
 import { CalendarCheck, MessageCircle, Stethoscope } from "lucide-react";
+import { Reveal } from "@/components/site/reveal";
 
 const STEPS = [
   {
@@ -27,8 +28,10 @@ export function VisitSteps() {
         </h2>
         <ol className="mt-8 grid gap-4 md:grid-cols-3">
           {STEPS.map((step, index) => (
-            <li
+            <Reveal
+              as="li"
               key={step.title}
+              delay={index * 120}
               className="rounded-xl border border-border bg-surface p-5 shadow-sm"
             >
               <step.icon className="h-5 w-5 text-primary" aria-hidden />
@@ -41,7 +44,7 @@ export function VisitSteps() {
               <p className="mt-2 text-sm leading-relaxed text-muted">
                 {step.body}
               </p>
-            </li>
+            </Reveal>
           ))}
         </ol>
       </div>

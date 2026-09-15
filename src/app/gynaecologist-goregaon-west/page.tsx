@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/site/json-ld";
 import { breadcrumbJsonLd } from "@/lib/json-ld";
 import { buttonVariants, cn } from "@/lib/utils";
 import { DOCTOR_NAME, LOCALITY, CITY } from "@/config/site";
+import { Reveal } from "@/components/site/reveal";
 
 const TITLE = "Gynaecologist in Goregaon West | Dr. Sayali Sawant";
 const DESCRIPTION =
@@ -35,7 +36,7 @@ export default function GynaecologistGoregaonWestPage() {
         <h1 className="font-display mt-3 text-3xl text-ink">
           Gynaecologist in Goregaon West
         </h1>
-        <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
+        <Reveal className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
           <p>
             {DOCTOR_NAME} is a Consultant Obstetrician and Gynaecologist
             practising in {LOCALITY}, {CITY}. Women from Goregaon East, Malad,
@@ -95,7 +96,7 @@ export default function GynaecologistGoregaonWestPage() {
             108 / 112. Use this site to read about the practice and to book OPD
             appointment slots only.
           </p>
-        </div>
+        </Reveal>
         <Link href="/#book" className={cn(buttonVariants(), "mt-8")}>
           Book OPD slot
         </Link>

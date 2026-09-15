@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/site/json-ld";
 import { breadcrumbJsonLd } from "@/lib/json-ld";
 import { buttonVariants, cn } from "@/lib/utils";
 import { DOCTOR_NAME, PRIOR_CENTRES } from "@/config/site";
+import { Reveal } from "@/components/site/reveal";
 
 const TITLE = "IVF Specialist in Goregaon West | Dr. Sayali Sawant";
 const DESCRIPTION =
@@ -35,7 +36,7 @@ export default function IvfSpecialistGoregaonWestPage() {
         <h1 className="font-display mt-3 text-3xl text-ink">
           IVF specialist in Goregaon West
         </h1>
-        <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
+        <Reveal className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
           <p>
             {DOCTOR_NAME} is an IVF/Infertility Specialist and obstetrician
             practising in Goregaon West, Mumbai. Couples from Goregaon, Malad,
@@ -90,7 +91,7 @@ export default function IvfSpecialistGoregaonWestPage() {
             severe pain, heavy bleeding, or any emergency, go to the nearest
             hospital emergency department or call 108 / 112.
           </p>
-        </div>
+        </Reveal>
         <Link href="/#book" className={cn(buttonVariants(), "mt-8")}>
           Book OPD slot
         </Link>

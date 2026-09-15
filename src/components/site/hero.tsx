@@ -10,6 +10,7 @@ import {
 import { formatSlotStarts } from "@/lib/datetime";
 import type { SlotSummary } from "@/lib/slot-types";
 import { HeroActions } from "@/components/site/hero-actions";
+import { Reveal } from "@/components/site/reveal";
 
 export function Hero({ summary }: { summary: SlotSummary }) {
   const nextLabel = summary.nextAvailable
@@ -37,36 +38,40 @@ export function Hero({ summary }: { summary: SlotSummary }) {
           </p>
         </div>
 
-        <figure className="relative mx-auto w-full max-w-sm">
-          <div
-            className="pointer-events-none absolute -left-6 -top-6 h-40 w-40 rounded-full bg-baby_pink-500 opacity-60 blur-2xl"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -bottom-8 -right-4 h-48 w-48 rounded-full bg-icy_blue-500 opacity-60 blur-2xl"
-            aria-hidden
-          />
-          <div className="relative overflow-hidden rounded-xl border border-border shadow-sm">
-            <Image
-              src={PROFILE_PHOTO}
-              alt={`${DOCTOR_NAME}, female gynaecologist in Goregaon West, Mumbai`}
-              width={720}
-              height={900}
-              priority
-              className="h-auto w-full object-cover"
+        <Reveal variant="scale">
+          <figure className="relative mx-auto w-full max-w-sm">
+            <div
+              className="pointer-events-none absolute -left-6 -top-6 h-40 w-40 rounded-full bg-baby_pink-500 opacity-60 blur-2xl animate-float-soft"
+              aria-hidden
             />
-          </div>
-          <figcaption className="relative mt-3 flex flex-wrap gap-2">
-            {["MBBS", "DNB Obs & Gyn", `MMC Reg. ${MMC_REG_NO}`].map((chip) => (
-              <span
-                key={chip}
-                className="rounded-xl border border-border bg-primary-soft px-3 py-2 text-xs font-medium text-ink"
-              >
-                {chip}
-              </span>
-            ))}
-          </figcaption>
-        </figure>
+            <div
+              className="pointer-events-none absolute -bottom-8 -right-4 h-48 w-48 rounded-full bg-icy_blue-500 opacity-60 blur-2xl animate-float-soft"
+              aria-hidden
+            />
+            <div className="relative overflow-hidden rounded-xl border border-border shadow-sm">
+              <Image
+                src={PROFILE_PHOTO}
+                alt={`${DOCTOR_NAME}, female gynaecologist in Goregaon West, Mumbai`}
+                width={720}
+                height={900}
+                priority
+                className="h-auto w-full object-cover"
+              />
+            </div>
+            <figcaption className="relative mt-3 flex flex-wrap gap-2">
+              {["MBBS", "DNB Obs & Gyn", `MMC Reg. ${MMC_REG_NO}`].map(
+                (chip) => (
+                  <span
+                    key={chip}
+                    className="rounded-xl border border-border bg-primary-soft px-3 py-2 text-xs font-medium text-ink"
+                  >
+                    {chip}
+                  </span>
+                ),
+              )}
+            </figcaption>
+          </figure>
+        </Reveal>
       </div>
     </section>
   );

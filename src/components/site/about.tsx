@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/site/reveal";
 import {
   DOCTOR_NAME,
   MMC_REG_NO,
@@ -8,7 +9,7 @@ import {
 export function About() {
   return (
     <section id="about" className="scroll-mt-24 bg-surface-warm py-14">
-      <div className="mx-auto max-w-6xl px-4">
+      <Reveal className="mx-auto max-w-6xl px-4">
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           About {DOCTOR_NAME}
         </h2>
@@ -63,7 +64,7 @@ export function About() {
             </li>
           </ol>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
