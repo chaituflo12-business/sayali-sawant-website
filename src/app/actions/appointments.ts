@@ -69,19 +69,20 @@ export async function createAppointment(
       return fail("VALIDATION", "Please check the form.");
     }
 
+    // book_appointment is service_role only. If Supabase is not configured,
+    // fail fast with NOT_CONFIGURED so clients can offer a WhatsApp fallback
+    // before consulting the rate limiter (which also depends on service_role).
+    const supabase = createServiceClient();
+    if (!supabase) {
+      return fail("NOT_CONFIGURED", NOT_CONFIGURED);
+    }
+
     const { allowed } = await assertBookingRateLimit();
     if (!allowed) {
       return fail(
         "RATE_LIMIT",
         "Too many attempts from this network. Please wait a few minutes.",
       );
-    }
-
-    // book_appointment is service_role only, so the browser cannot reach it
-    // directly and skip the checks above.
-    const supabase = createServiceClient();
-    if (!supabase) {
-      return fail("NOT_CONFIGURED", NOT_CONFIGURED);
     }
 
     const { data, error } = await supabase.rpc("book_appointment", {
@@ -234,17 +235,17 @@ export async function joinWaitlist(
       return fail("VALIDATION", "Please check the form.");
     }
 
+    const supabase = createServiceClient();
+    if (!supabase) {
+      return fail("NOT_CONFIGURED", NOT_CONFIGURED);
+    }
+
     const { allowed } = await assertBookingRateLimit();
     if (!allowed) {
       return fail(
         "RATE_LIMIT",
         "Too many attempts from this network. Please wait a few minutes.",
       );
-    }
-
-    const supabase = createServiceClient();
-    if (!supabase) {
-      return fail("NOT_CONFIGURED", NOT_CONFIGURED);
     }
 
     const { data, error } = await supabase.rpc("join_waitlist", {
