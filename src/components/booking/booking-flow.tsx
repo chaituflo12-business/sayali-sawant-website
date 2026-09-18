@@ -258,6 +258,7 @@ export function BookingFlow({
                   key={day.date}
                   type="button"
                   disabled={disabled}
+                  aria-pressed={selected}
                   onClick={() => setSelectedDate(day.date)}
                   className={cn(
                     "min-h-11 min-w-[4.5rem] rounded-xl border px-2 text-xs font-medium",
@@ -285,7 +286,10 @@ export function BookingFlow({
       {step === 2 ? (
         <div>
           {slotTaken ? (
-            <p className="mb-3 rounded-xl border border-error bg-highlight-soft px-3 py-2 text-sm text-error">
+            <p
+              role="alert"
+              className="mb-3 rounded-xl border border-error bg-highlight-soft px-3 py-2 text-sm text-error"
+            >
               That time was just taken, please pick another
             </p>
           ) : null}
@@ -304,6 +308,8 @@ export function BookingFlow({
                     key={slot.slotId}
                     type="button"
                     disabled={taken}
+                    aria-pressed={selected}
+                    aria-label={`${formatIstTime(new Date(slot.startsAt))} IST${taken ? ", taken" : ""}`}
                     onClick={() => setSelectedSlot(slot)}
                     className={cn(
                       "min-h-11 rounded-xl border px-2 text-xs",
@@ -314,7 +320,9 @@ export function BookingFlow({
                     )}
                   >
                     {formatIstTime(new Date(slot.startsAt))}
-                    <span className="mt-0.5 block text-[10px] text-muted">IST</span>
+                    <span aria-hidden className="mt-0.5 block text-[10px] text-muted">
+                      IST
+                    </span>
                   </button>
                 );
               })}
@@ -370,6 +378,8 @@ export function BookingFlow({
                 <span className="text-ink">Name</span>
                 <input
                   required
+                  name="name"
+                  autoComplete="name"
                   minLength={2}
                   maxLength={80}
                   value={name}
@@ -385,6 +395,9 @@ export function BookingFlow({
                   </span>
                   <input
                     required
+                    type="tel"
+                    name="whatsapp"
+                    autoComplete="tel-national"
                     inputMode="numeric"
                     pattern="[6-9][0-9]{9}"
                     maxLength={10}
@@ -402,6 +415,8 @@ export function BookingFlow({
                 <input
                   required
                   type="number"
+                  name="age"
+                  inputMode="numeric"
                   min={1}
                   max={110}
                   value={age}
@@ -416,6 +431,7 @@ export function BookingFlow({
                     <button
                       key={value}
                       type="button"
+                      aria-pressed={gender === value}
                       onClick={() => setGender(value)}
                       className={cn(
                         "min-h-11 rounded-xl border px-2 text-xs",
@@ -471,7 +487,7 @@ export function BookingFlow({
             </p>
           )}
           {formError ? (
-            <div className="space-y-2">
+            <div role="alert" className="space-y-2">
               <p className="text-sm text-error">{formError}</p>
               <button
                 type="button"

@@ -33,7 +33,7 @@ export function OpdHours({
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           OPD hours in Goregaon West
         </h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted">
+        <p className="mt-2 max-w-2xl text-base text-muted">
           Appointments are in 15-minute slots. Times are shown in Indian Standard
           Time (IST).
         </p>

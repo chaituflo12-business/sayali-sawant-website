@@ -36,7 +36,7 @@ export default function IvfSpecialistGoregaonWestPage() {
         <h1 className="font-display mt-3 text-3xl text-ink">
           IVF specialist in Goregaon West
         </h1>
-        <Reveal className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
+        <Reveal className="mt-6 space-y-4 text-base leading-relaxed text-muted">
           <p>
             {DOCTOR_NAME} is an IVF/Infertility Specialist and obstetrician
             practising in Goregaon West, Mumbai. Couples from Goregaon, Malad,

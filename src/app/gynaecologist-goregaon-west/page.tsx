@@ -36,7 +36,7 @@ export default function GynaecologistGoregaonWestPage() {
         <h1 className="font-display mt-3 text-3xl text-ink">
           Gynaecologist in Goregaon West
         </h1>
-        <Reveal className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
+        <Reveal className="mt-6 space-y-4 text-base leading-relaxed text-muted">
           <p>
             {DOCTOR_NAME} is a Consultant Obstetrician and Gynaecologist
             practising in {LOCALITY}, {CITY}. Women from Goregaon East, Malad,

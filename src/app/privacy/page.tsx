@@ -24,7 +24,7 @@ export default function PrivacyPage() {
       />
       <article className="mx-auto max-w-3xl px-4 py-12">
         <h1 className="font-display text-3xl text-ink">Privacy</h1>
-        <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
+        <div className="mt-6 space-y-4 text-base leading-relaxed text-muted">
           <p>
             {DOCTOR_NAME}&apos;s website collects only the details needed to
             schedule an outpatient visit: name, WhatsApp mobile number, age,

@@ -9,7 +9,7 @@ export function About() {
           About {DOCTOR_NAME}
         </h2>
         <Reveal className="mt-6 grid gap-8 md:grid-cols-[1.4fr_1fr]">
-          <article className="space-y-4 text-sm leading-relaxed text-muted">
+          <article className="space-y-4 text-base leading-relaxed text-muted">
             <p>
               {DOCTOR_NAME} is a Consultant Obstetrician and Gynaecologist and
               IVF/Infertility Specialist practising in Goregaon West, Mumbai. She

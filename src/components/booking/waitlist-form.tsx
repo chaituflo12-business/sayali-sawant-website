@@ -84,6 +84,8 @@ export function WaitlistForm({
         <span className="text-ink">Name</span>
         <input
           required
+          name="name"
+          autoComplete="name"
           minLength={2}
           maxLength={80}
           value={name}
@@ -99,6 +101,9 @@ export function WaitlistForm({
           </span>
           <input
             required
+            type="tel"
+            name="whatsapp"
+            autoComplete="tel-national"
             inputMode="numeric"
             pattern="[6-9][0-9]{9}"
             maxLength={10}
@@ -121,7 +126,11 @@ export function WaitlistForm({
         />
         <span>{DPDP_CONSENT}</span>
       </label>
-      {error ? <p className="text-sm text-error">{error}</p> : null}
+      {error ? (
+        <p role="alert" className="text-sm text-error">
+          {error}
+        </p>
+      ) : null}
       <div className="flex gap-2">
         <button
           type="button"

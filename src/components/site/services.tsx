@@ -46,7 +46,7 @@ export function Services() {
           <h2 className="font-display text-2xl text-ink md:text-3xl">
             Gynaecology, pregnancy and fertility care in Goregaon West
           </h2>
-          <p className="mt-2 max-w-2xl text-sm text-muted">
+          <p className="mt-2 max-w-2xl text-base text-muted">
             Outpatient consultations for women from Goregaon, Malad, Jogeshwari
             and Andheri West. Each visit is planned around your questions, not a
             list of packages.
@@ -72,7 +72,7 @@ export function Services() {
                 </span>
                 <div>
                   <h3 className="font-display text-base text-ink">{service.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                  <p className="mt-2 text-base leading-relaxed text-muted">
                     {service.body}
                   </p>
                 </div>

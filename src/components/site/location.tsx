@@ -23,13 +23,13 @@ export function Location() {
           <h2 className="font-display text-2xl text-ink md:text-3xl">
             Women&apos;s health clinic, Goregaon West
           </h2>
-          <p className="mt-4 text-sm leading-relaxed text-ink">{CLINIC_ADDRESS}</p>
-          <p className="mt-2 text-sm text-muted">{LANDMARKS}</p>
-          <p className="mt-3 text-sm text-muted">
+          <p className="mt-4 text-base leading-relaxed text-ink">{CLINIC_ADDRESS}</p>
+          <p className="mt-2 text-base text-muted">{LANDMARKS}</p>
+          <p className="mt-3 text-base text-muted">
             <span className="font-medium text-ink">Parking: </span>
             {PARKING_NOTE}
           </p>
-          <p className="mt-2 text-sm text-muted">
+          <p className="mt-2 text-base text-muted">
             <span className="font-medium text-ink">Nearest station: </span>
             {NEAREST_STATION}
           </p>

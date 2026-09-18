@@ -329,3 +329,22 @@ h3,
     transition: none;
   }
 }
+
+/* ---- Forms and pointers ---- */
+/* iOS Safari zooms the page when a focused field is under 16px. Unlayered on
+   purpose so it wins over any inherited text-sm on a label wrapper. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+select,
+textarea {
+  font-size: max(1rem, 1em);
+}
+
+/* Tailwind v4 resets buttons to the default arrow cursor. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary,
+  select {
+    cursor: pointer;
+  }
+}

@@ -23,7 +23,7 @@ export function Faq() {
                   <span className="hidden text-primary group-open:inline">–</span>
                 </span>
               </summary>
-              <p className="pb-4 text-sm leading-relaxed text-muted">
+              <p className="pb-4 text-base leading-relaxed text-muted">
                 {item.answer}
               </p>
             </details>

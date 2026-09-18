@@ -1,5 +1,6 @@
 import { CalendarCheck, MessageCircle, Stethoscope } from "lucide-react";
 import { Reveal, RevealGroup } from "@/components/site/reveal";
+import { WHATSAPP_AUTOMATION_LIVE } from "@/config/site";
 
 const STEPS = [
   {
@@ -9,8 +10,12 @@ const STEPS = [
   },
   {
     icon: MessageCircle,
-    title: "WhatsApp confirmation with directions",
-    body: "You receive a message with your reference, time, and a maps link to the clinic.",
+    title: WHATSAPP_AUTOMATION_LIVE
+      ? "WhatsApp confirmation with directions"
+      : "Confirmation on WhatsApp",
+    body: WHATSAPP_AUTOMATION_LIVE
+      ? "You receive a message with your reference, time, and a maps link to the clinic."
+      : "The clinic confirms your time on WhatsApp and shares a maps link to the clinic.",
   },
   {
     icon: Stethoscope,
@@ -46,7 +51,7 @@ export function VisitSteps() {
               <h3 className="font-display mt-1 text-base text-ink">
                 {step.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
+              <p className="mt-2 text-base leading-relaxed text-muted">
                 {step.body}
               </p>
             </div>

@@ -41,7 +41,7 @@ export function TrustStrip() {
             <h2 className="text-xs font-medium uppercase tracking-wide text-primary">
               {tile.label}
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-ink">{tile.value}</p>
+            <p className="mt-2 text-base leading-relaxed text-ink">{tile.value}</p>
           </article>
         ))}
       </RevealGroup>

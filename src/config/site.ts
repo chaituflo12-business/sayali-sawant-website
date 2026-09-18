@@ -6,6 +6,13 @@ export const SPECIALITY_LINE =
 export const PRACTICE_START_YEAR = 2017;
 export const MMC_REG_NO = "2017/08/3926";
 
+/**
+ * Flip to true only once AiSensy templates are Meta-approved and Make is
+ * sending messages on its own. Until then the site must not promise an
+ * automatic WhatsApp message, because none will arrive.
+ */
+export const WHATSAPP_AUTOMATION_LIVE = false;
+
 export type Qualification = {
   degree: string;
   /** The body that confers the degree. */

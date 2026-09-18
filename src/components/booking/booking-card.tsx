@@ -1,4 +1,6 @@
 import { BookingFlow } from "@/components/booking/booking-flow";
+import { BookingOpenButton } from "@/components/booking/booking-open-button";
+import { WHATSAPP_AUTOMATION_LIVE } from "@/config/site";
 
 export function BookingCard() {
   return (
@@ -7,16 +9,17 @@ export function BookingCard() {
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           Book an OPD appointment
         </h2>
-        <p className="mt-2 text-sm text-muted">
-          Choose a day and time in Goregaon West. You will receive a WhatsApp
-          message with directions.
+        <p className="mt-2 text-base text-muted">
+          Choose a day and time in Goregaon West.{" "}
+          {WHATSAPP_AUTOMATION_LIVE
+            ? "You will receive a WhatsApp message with directions."
+            : "The clinic confirms your time on WhatsApp."}
         </p>
         <div className="mt-6 hidden rounded-xl border border-border bg-surface p-6 shadow-sm md:block">
           <BookingFlow />
         </div>
-        <p className="mt-4 text-sm text-muted md:hidden">
-          Use the Book OPD slot button at the bottom of the screen.
-        </p>
+        {/* A phone gets the action itself, not directions to a button elsewhere. */}
+        <BookingOpenButton className="mt-5 md:hidden" />
       </div>
     </section>
   );
