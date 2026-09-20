@@ -1,0 +1,536 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import {
+  createAppointment,
+  loadBookingBoard,
+  loadSlotsForDay,
+} from "@/app/actions/appointments";
+import type {
+  BookedAppointment,
+  DaySummary,
+  PublicSlot,
+} from "@/lib/slot-types";
+import { formatIstTime } from "@/lib/datetime";
+import { buttonVariants, cn } from "@/lib/utils";
+import { DPDP_CONSENT } from "@/lib/disclaimer";
+import {
+  genderLabels,
+  genderValues,
+  visitTypeLabels,
+  visitTypeValues,
+} from "@/lib/validation/appointment";
+import { GOOGLE_MAPS_DIR_URL, telHref, whatsappHref } from "@/config/site";
+import { ConfirmationCard } from "@/components/booking/confirmation-card";
+import { BrandMark } from "@/components/site/brand-mark";
+import { WaitlistForm } from "@/components/booking/waitlist-form";
+import { DateStrip, MonthCalendar } from "@/components/booking/date-picker";
+
+type Step = 1 | 2;
+
+function dayLabel(date: string) {
+  return new Date(`${date}T00:00:00+05:30`).toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    timeZone: "Asia/Kolkata",
+  });
+}
+
+export function BookingFlow({
+  compact = false,
+  manageToken,
+  onReschedule,
+}: {
+  compact?: boolean;
+  manageToken?: string;
+  onReschedule?: (slotId: string) => Promise<void>;
+}) {
+  const [step, setStep] = useState<Step>(1);
+  // Which way the last step change went, so the new step slides in from
+  // that side. Null on first render: the opening step does not animate.
+  const [stepDirection, setStepDirection] = useState<
+    "forward" | "back" | null
+  >(null);
+  function goToStep(next: Step) {
+    setStepDirection(next > step ? "forward" : "back");
+    setStep(next);
+  }
+  const [days, setDays] = useState<DaySummary[]>([]);
+  const [live, setLive] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [slots, setSlots] = useState<PublicSlot[]>([]);
+  const [selectedSlot, setSelectedSlot] = useState<PublicSlot | null>(null);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [slotTaken, setSlotTaken] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [confirmation, setConfirmation] = useState<BookedAppointment | null>(
+    null,
+  );
+  const [sendOnWhatsApp, setSendOnWhatsApp] = useState(false);
+
+  const [name, setName] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState<(typeof genderValues)[number]>("female");
+  const [visitType, setVisitType] =
+    useState<(typeof visitTypeValues)[number]>("new_consult");
+  const [reason, setReason] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [website, setWebsite] = useState("");
+
+  useEffect(() => {
+    void loadBookingBoard().then((result) => {
+      if (result.ok) {
+        setDays(result.data.days);
+        setLive(result.data.live);
+        const firstOpen = result.data.days.find(
+          (d) => d.status === "available" || d.status === "limited",
+        );
+        if (firstOpen) setSelectedDate(firstOpen.date);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!selectedDate) return;
+    setLoadingSlots(true);
+    setSelectedSlot(null);
+    void loadSlotsForDay(selectedDate).then((result) => {
+      setLoadingSlots(false);
+      if (result.ok) {
+        setSlots(result.data.slots);
+        setLive(result.data.live);
+      }
+    });
+  }, [selectedDate]);
+
+  const progress = useMemo(() => [1, 2] as const, []);
+  const noneRemaining = useMemo(
+    () => slots.every((slot) => slot.remaining <= 0),
+    [slots],
+  );
+
+  async function refetchSelectedDay() {
+    if (!selectedDate) return;
+    const result = await loadSlotsForDay(selectedDate);
+    if (result.ok) setSlots(result.data.slots);
+  }
+
+  async function onSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    if (!selectedSlot) return;
+    setFormError(null);
+    setSlotTaken(false);
+
+    if (manageToken && onReschedule) {
+      setSubmitting(true);
+      try {
+        await onReschedule(selectedSlot.slotId);
+      } finally {
+        setSubmitting(false);
+      }
+      return;
+    }
+
+    setSubmitting(true);
+    const result = await createAppointment({
+      name,
+      whatsapp,
+      age: Number(age),
+      gender,
+      visitType,
+      reason: reason || undefined,
+      slotId: selectedSlot.slotId,
+      consent,
+      website,
+    });
+    setSubmitting(false);
+
+    if (!result.ok) {
+      if (result.code === "SLOT_TAKEN") {
+        setSlotTaken(true);
+        setSelectedSlot(null);
+        goToStep(1);
+        await refetchSelectedDay();
+        return;
+      }
+      if (result.code === "NOT_CONFIGURED") {
+        setSendOnWhatsApp(true);
+        return;
+      }
+      setFormError(result.message);
+      return;
+    }
+    setConfirmation(result.data);
+  }
+
+  if (confirmation) {
+    return <ConfirmationCard appointment={confirmation} />;
+  }
+
+  // Online booking needs a database. Until one is connected, hand the patient
+  // everything they just typed as a WhatsApp message so the visit is still
+  // requested rather than lost at the last step.
+  function requestMessage(): string {
+    const when =
+      selectedDate && selectedSlot
+        ? `${dayLabel(selectedDate)} at ${formatIstTime(new Date(selectedSlot.startsAt))}`
+        : "the next available time";
+    const lines = [
+      "Hello, I would like to book an OPD appointment with Dr. Sayali Sawant.",
+      "",
+      `Name: ${name}`,
+      `Age: ${age}`,
+      `Preferred time: ${when} (IST)`,
+      `Visit type: ${visitTypeLabels[visitType]}`,
+    ];
+    if (reason.trim()) lines.push(`Reason: ${reason.trim()}`);
+    return lines.join(`
+`);
+  }
+
+  if (sendOnWhatsApp) {
+    return (
+      <div className="card-soft rounded-2xl bg-surface p-5">
+        <h3 className="font-display text-lg text-ink">
+          Send your request on WhatsApp
+        </h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          Instant online booking is not switched on yet. Your details are ready
+          to send as a message, and the clinic will confirm your time.
+        </p>
+        <pre className="mt-4 overflow-x-auto whitespace-pre-wrap rounded-xl bg-primary-soft p-4 text-sm text-ink">
+          {requestMessage()}
+        </pre>
+        <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+          <a
+            href={whatsappHref(requestMessage())}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(buttonVariants({ variant: "whatsapp" }), "flex-1")}
+          >
+            Send on WhatsApp
+          </a>
+          <a
+            href={telHref()}
+            className={cn(buttonVariants({ variant: "secondary" }), "flex-1")}
+          >
+            Call the clinic
+          </a>
+        </div>
+        <button
+          type="button"
+          onClick={() => setSendOnWhatsApp(false)}
+          className={cn(buttonVariants({ variant: "ghost" }), "mt-2 w-full")}
+        >
+          Change my details
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className={cn("flex flex-col gap-5", compact ? "" : "p-1")}>
+      {!live ? (
+        <p className="rounded-xl bg-primary-soft px-3 py-2 text-xs text-ink">
+          Showing typical OPD times. Live booking opens once the clinic calendar
+          is connected.
+        </p>
+      ) : null}
+
+      <div className="flex items-center justify-center gap-2" aria-hidden>
+        {progress.map((item) => (
+          <span
+            key={item}
+            className={cn(
+              "h-2 w-2 rounded-full",
+              item <= step ? "bg-primary" : "bg-border",
+            )}
+          />
+        ))}
+      </div>
+      <p className="text-center text-xs text-muted">
+        Step {step} of 2 ·{" "}
+        {step === 1 ? "Pick a date and time" : "Your details"}
+      </p>
+
+      {step === 1 ? (
+        <div
+          className={cn(
+            "flex flex-col gap-4 md:grid md:grid-cols-[auto_minmax(0,1fr)] md:items-start md:gap-6",
+            stepDirection === "back" && "step-in-back",
+          )}
+        >
+          {/* Phones get a swipeable strip of date cards; a month grid of
+              greyed evenings is too small to tap and mostly empty. */}
+          <DateStrip
+            className="md:hidden"
+            days={days}
+            selected={selectedDate}
+            onSelect={setSelectedDate}
+          />
+          <div className="hidden md:block">
+            <MonthCalendar
+              days={days}
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+            />
+          </div>
+
+          {/* Times appear beside the calendar the moment a date is chosen,
+              so choosing a date and a time is one step, not two. */}
+          <div className="md:min-h-[20rem]">
+            {selectedDate ? (
+              <p className="mb-3 text-sm font-medium text-ink">
+                Times on {dayLabel(selectedDate)}{" "}
+                <span className="font-normal text-muted">(IST)</span>
+              </p>
+            ) : null}
+            {slotTaken ? (
+              <p
+                role="alert"
+                className="mb-3 rounded-xl border border-error bg-highlight-soft px-3 py-2 text-sm text-error"
+              >
+                That time was just taken, please pick another
+              </p>
+            ) : null}
+            {loadingSlots ? (
+              <p className="flex items-center gap-3 text-sm text-muted">
+                <BrandMark size={28} className="mark-pulse" title="Loading" />
+                Loading times…
+              </p>
+            ) : (
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-3">
+                {slots.map((slot) => {
+                  const taken = slot.remaining <= 0;
+                  const selected = selectedSlot?.slotId === slot.slotId;
+                  return (
+                    <button
+                      key={slot.slotId}
+                      type="button"
+                      disabled={taken}
+                      aria-pressed={selected}
+                      aria-label={`${formatIstTime(new Date(slot.startsAt))} IST${taken ? ", taken" : ""}`}
+                      onClick={() => setSelectedSlot(slot)}
+                      className={cn(
+                        "min-h-11 rounded-xl border px-2 text-sm transition-colors duration-150",
+                        taken
+                          ? "cursor-not-allowed border-border bg-background text-muted line-through"
+                          : selected
+                            ? "border-primary bg-primary text-white"
+                            : "border-accent bg-accent-soft text-ink",
+                      )}
+                    >
+                      {formatIstTime(new Date(slot.startsAt))}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+            {selectedDate && noneRemaining && !loadingSlots ? (
+              <>
+                <p className="text-sm text-muted">No open times on this day.</p>
+                {!manageToken ? (
+                  <WaitlistForm
+                    dateIst={selectedDate}
+                    dayLabel={dayLabel(selectedDate)}
+                    visitType={visitType}
+                  />
+                ) : null}
+              </>
+            ) : null}
+          </div>
+
+          <button
+            type="button"
+            className={cn(buttonVariants(), "w-full md:col-span-2")}
+            disabled={!selectedSlot}
+            onClick={() => goToStep(2)}
+          >
+            Continue
+          </button>
+        </div>
+      ) : null}
+
+      {step === 2 ? (
+        <form
+          onSubmit={onSubmit}
+          className={cn(
+            "space-y-3",
+            stepDirection === "forward" && "step-in-forward",
+          )}
+        >
+          <input
+            type="text"
+            name="website"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+            className="hidden"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden
+          />
+          {!manageToken ? (
+            <>
+              <label className="block text-sm">
+                <span className="text-ink">Name</span>
+                <input
+                  required
+                  name="name"
+                  autoComplete="name"
+                  minLength={2}
+                  maxLength={80}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="mt-1 min-h-11 w-full rounded-xl border border-border bg-surface px-3 text-ink"
+                />
+              </label>
+              <label className="block text-sm">
+                <span className="text-ink">WhatsApp mobile</span>
+                <span className="mt-1 flex overflow-hidden rounded-xl border border-border">
+                  <span className="inline-flex min-h-11 items-center bg-primary-soft px-3 text-sm text-ink">
+                    +91
+                  </span>
+                  <input
+                    required
+                    type="tel"
+                    name="whatsapp"
+                    autoComplete="tel-national"
+                    inputMode="numeric"
+                    pattern="[6-9][0-9]{9}"
+                    maxLength={10}
+                    value={whatsapp}
+                    onChange={(e) =>
+                      setWhatsapp(
+                        e.target.value.replace(/\D/g, "").slice(0, 10),
+                      )
+                    }
+                    className="min-h-11 w-full px-3 text-ink"
+                    placeholder="9XXXXXXXXX"
+                  />
+                </span>
+              </label>
+              <label className="block text-sm">
+                <span className="text-ink">Age</span>
+                <input
+                  required
+                  type="number"
+                  name="age"
+                  inputMode="numeric"
+                  min={1}
+                  max={110}
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  className="mt-1 min-h-11 w-full rounded-xl border border-border bg-surface px-3 text-ink"
+                />
+              </label>
+              <fieldset>
+                <legend className="text-sm text-ink">Gender</legend>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {genderValues.map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      aria-pressed={gender === value}
+                      onClick={() => setGender(value)}
+                      className={cn(
+                        "min-h-11 rounded-xl border px-2 text-xs",
+                        gender === value
+                          ? "border-primary bg-primary-soft text-ink"
+                          : "border-border bg-surface text-muted",
+                      )}
+                    >
+                      {genderLabels[value]}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+              <label className="block text-sm">
+                <span className="text-ink">Visit type</span>
+                <select
+                  value={visitType}
+                  onChange={(e) =>
+                    setVisitType(
+                      e.target.value as (typeof visitTypeValues)[number],
+                    )
+                  }
+                  className="mt-1 min-h-11 w-full rounded-xl border border-border bg-surface px-3 text-ink"
+                >
+                  {visitTypeValues.map((value) => (
+                    <option key={value} value={value}>
+                      {visitTypeLabels[value]}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="block text-sm">
+                <span className="text-ink">Reason (optional, one line)</span>
+                <input
+                  maxLength={160}
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  className="mt-1 min-h-11 w-full rounded-xl border border-border bg-surface px-3 text-ink"
+                />
+              </label>
+              <label className="flex items-start gap-3 text-sm text-muted">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="mt-1 h-5 w-5"
+                  required
+                />
+                <span>{DPDP_CONSENT}</span>
+              </label>
+            </>
+          ) : (
+            <p className="text-sm text-muted">
+              Confirm the new time. Your existing details stay the same.
+            </p>
+          )}
+          {formError ? (
+            <div role="alert" className="space-y-2">
+              <p className="text-sm text-error">{formError}</p>
+              <button
+                type="button"
+                onClick={() => setSendOnWhatsApp(true)}
+                className="text-sm font-medium text-primary underline underline-offset-2"
+              >
+                Send this request on WhatsApp instead
+              </button>
+            </div>
+          ) : null}
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className={cn(buttonVariants({ variant: "secondary" }), "flex-1")}
+              onClick={() => goToStep(1)}
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              className={cn(buttonVariants(), "flex-1")}
+              disabled={submitting}
+            >
+              {submitting
+                ? "Please wait…"
+                : manageToken
+                  ? "Confirm new time"
+                  : "Confirm booking"}
+            </button>
+          </div>
+        </form>
+      ) : null}
+
+      <p className="text-xs text-muted">
+        Maps:{" "}
+        <a className="text-primary underline" href={GOOGLE_MAPS_DIR_URL}>
+          Get directions
+        </a>
+      </p>
+    </div>
+  );
+}

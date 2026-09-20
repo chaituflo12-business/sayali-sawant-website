@@ -1,0 +1,4 @@
+# Minimal local config. Project ref is set after `supabase link`.
+
+[functions.deliver-webhooks]
+verify_jwt = true
