@@ -1,9 +1,5 @@
 import Link from "next/link";
-import {
-  CLINIC_ADDRESS,
-  DOCTOR_NAME,
-  MMC_REG_NO,
-} from "@/config/site";
+import { CLINIC_ADDRESS, DOCTOR_NAME } from "@/config/site";
 import { formatSession } from "@/lib/hours";
 import { resolveOpdHours } from "@/lib/opd-hours";
 import { BrandMark } from "@/components/site/brand-mark";
@@ -17,7 +13,7 @@ export async function Footer() {
       ? ""
       : open.length === 1
         ? open[0].label
-        : `${open[0].label.slice(0, 3)}–${open[open.length - 1].label.slice(0, 3)}`;
+        : `${open[0].label.slice(0, 3)}-${open[open.length - 1].label.slice(0, 3)}`;
   const timeLine = open[0]
     ? open[0].sessions.map(formatSession).join(", ")
     : "";
@@ -33,7 +29,7 @@ export async function Footer() {
           <BrandMark size={44} className="mb-3" />
           <p className="font-display text-lg text-ink">{DOCTOR_NAME}</p>
           <p className="mt-1 text-sm text-muted">
-            Maharashtra Medical Council Reg. No. {MMC_REG_NO}
+            Obstetrician, Gynaecologist and IVF Specialist
           </p>
           <p className="mt-3 text-sm text-muted">{CLINIC_ADDRESS}</p>
           <p className="mt-2 text-sm text-muted">

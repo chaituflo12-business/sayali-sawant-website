@@ -5,7 +5,7 @@ import { WHATSAPP_AUTOMATION_LIVE } from "@/config/site";
 const STEPS = [
   {
     icon: CalendarCheck,
-    title: "Book online in 30 seconds",
+    title: "Book online",
     body: "Pick a day and a 15-minute OPD slot, then share your name and WhatsApp number.",
   },
   {
@@ -26,7 +26,7 @@ const STEPS = [
 
 export function VisitSteps() {
   return (
-    <section className="py-14">
+    <section className="py-14 md:py-20 lg:py-28">
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
           <h2 className="font-display text-2xl text-ink md:text-3xl">
@@ -42,13 +42,15 @@ export function VisitSteps() {
           {STEPS.map((step, index) => (
             <div
               key={step.title}
-              className="h-full rounded-xl border border-border bg-surface p-5 shadow-sm"
+              className="card-soft h-full rounded-2xl bg-surface p-5"
             >
-              <step.icon className="h-5 w-5 text-primary" aria-hidden />
-              <p className="mt-3 text-xs font-medium uppercase tracking-wide text-primary">
-                Step {index + 1}
-              </p>
-              <h3 className="font-display mt-1 text-base text-ink">
+              <div className="flex items-center gap-3">
+                <span className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-primary-soft text-sm text-primary">
+                  {index + 1}
+                </span>
+                <step.icon className="h-5 w-5 text-primary" aria-hidden />
+              </div>
+              <h3 className="font-display mt-4 text-base text-ink">
                 {step.title}
               </h3>
               <p className="mt-2 text-base leading-relaxed text-muted">

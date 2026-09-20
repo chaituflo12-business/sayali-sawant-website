@@ -2,23 +2,23 @@
 @import "react-day-picker/style.css";
 
 :root {
-  --background: #f2f9ff;
+  --background: #fdf3fe;
   --surface: #ffffff;
-  --surface-warm: #fff4f8;
-  --ink: #2b1a36;
-  --muted: #57346b;
-  --primary: #0056a7;
-  --primary-hover: #002b54;
-  --primary-soft: #daedff;
-  --accent: #824ea1;
-  --accent-soft: #ebe1f0;
-  --highlight: #ffafcc;
-  --highlight-soft: #ffdeea;
+  --surface-warm: #fcedfe;
+  --ink: #290628;
+  --muted: #6b2555;
+  --primary: #6200b3;
+  --primary-hover: #3b0086;
+  --primary-soft: #eedbff;
+  --accent: #b43e8f;
+  --accent-soft: #f9eff6;
+  --highlight: #ea7af4;
+  --highlight-soft: #f7cafb;
   --warning: #b60046;
   --warning-soft: #ffe9f1;
   --error: #ab003f;
-  --border: #e0d2e9;
-  --focus-ring: #0082fb;
+  --border: #f4dfed;
+  --focus-ring: #8700f5;
   /* Real font stacks. @theme inline does not emit variables, so anything
      that reads var(--font-*) in plain CSS must point here. */
   --font-body: var(--font-open-sans), "Open Sans", ui-sans-serif, system-ui, sans-serif;
@@ -26,60 +26,113 @@
 }
 
 @theme {
-  --color-thistle-100: #2b1a36;
-  --color-thistle-200: #57346b;
-  --color-thistle-300: #824ea1;
-  --color-thistle-400: #a87ec1;
-  --color-thistle-500: #cdb4db;
-  --color-thistle-600: #d6c2e2;
-  --color-thistle-700: #e0d2e9;
-  --color-thistle-800: #ebe1f0;
-  --color-thistle-900: #f5f0f8;
-  --color-thistle: #cdb4db;
+  --color-thistle-100: #471839;
+  --color-thistle-200: #6b2555;
+  --color-thistle-300: #8f3171;
+  --color-thistle-400: #b43e8f;
+  --color-thistle-500: #e3aed3;
+  --color-thistle-600: #f1d7e9;
+  --color-thistle-700: #f6e5f1;
+  --color-thistle-800: #f9eff6;
+  --color-thistle-900: #fcf7fb;
+  --color-thistle: #e3aed3;
 
-  --color-pastel_petal-100: #5b0023;
-  --color-pastel_petal-200: #b60046;
-  --color-pastel_petal-300: #ff116c;
-  --color-pastel_petal-400: #ff6ca4;
-  --color-pastel_petal-500: #ffc8dd;
-  --color-pastel_petal-600: #ffd2e3;
-  --color-pastel_petal-700: #ffddea;
-  --color-pastel_petal-800: #ffe9f1;
-  --color-pastel_petal-900: #fff4f8;
-  --color-pastel_petal: #ffc8dd;
+  --color-pastel_petal-100: #7d0b88;
+  --color-pastel_petal-200: #bc11cc;
+  --color-pastel_petal-300: #df37ef;
+  --color-pastel_petal-400: #ea7af4;
+  --color-pastel_petal-500: #f7cafb;
+  --color-pastel_petal-600: #fbe5fd;
+  --color-pastel_petal-700: #fceefe;
+  --color-pastel_petal-800: #fdf5fe;
+  --color-pastel_petal-900: #fefaff;
+  --color-pastel_petal: #f7cafb;
 
-  --color-baby_pink-100: #56001f;
-  --color-baby_pink-200: #ab003f;
-  --color-baby_pink-300: #ff025f;
-  --color-baby_pink-400: #ff5895;
-  --color-baby_pink-500: #ffafcc;
-  --color-baby_pink-600: #ffbed6;
-  --color-baby_pink-700: #ffcee0;
-  --color-baby_pink-800: #ffdeea;
-  --color-baby_pink-900: #ffeff5;
-  --color-baby_pink: #ffafcc;
+  --color-baby_pink-100: #7d0b88;
+  --color-baby_pink-200: #bc11cc;
+  --color-baby_pink-300: #df37ef;
+  --color-baby_pink-400: #ea7af4;
+  --color-baby_pink-500: #f7cafb;
+  --color-baby_pink-600: #fbe5fd;
+  --color-baby_pink-700: #fceefe;
+  --color-baby_pink-800: #fdf5fe;
+  --color-baby_pink-900: #fefaff;
+  --color-baby_pink: #f7cafb;
 
-  --color-icy_blue-100: #012f57;
-  --color-icy_blue-200: #035eaf;
-  --color-icy_blue-300: #0f8dfb;
-  --color-icy_blue-400: #66b6fd;
-  --color-icy_blue-500: #bde0fe;
-  --color-icy_blue-600: #cbe6fe;
-  --color-icy_blue-700: #d8ecfe;
-  --color-icy_blue-800: #e5f3ff;
-  --color-icy_blue-900: #f2f9ff;
-  --color-icy_blue: #bde0fe;
+  --color-icy_blue-100: #170035;
+  --color-icy_blue-200: #220050;
+  --color-icy_blue-300: #2e006a;
+  --color-icy_blue-400: #3b0086;
+  --color-icy_blue-500: #a968ff;
+  --color-icy_blue-600: #d4b4ff;
+  --color-icy_blue-700: #e3ceff;
+  --color-icy_blue-800: #eee1ff;
+  --color-icy_blue-900: #f6f0ff;
+  --color-icy_blue: #a968ff;
 
-  --color-sky_blue-100: #002b54;
-  --color-sky_blue-200: #0056a7;
-  --color-sky_blue-300: #0082fb;
-  --color-sky_blue-400: #50aaff;
-  --color-sky_blue-500: #a2d2ff;
-  --color-sky_blue-600: #b6dcff;
-  --color-sky_blue-700: #c8e4ff;
-  --color-sky_blue-800: #daedff;
-  --color-sky_blue-900: #edf6ff;
-  --color-sky_blue: #a2d2ff;
+  --color-sky_blue-100: #270047;
+  --color-sky_blue-200: #3b006b;
+  --color-sky_blue-300: #4f008f;
+  --color-sky_blue-400: #6200b3;
+  --color-sky_blue-500: #c37aff;
+  --color-sky_blue-600: #e1bdff;
+  --color-sky_blue-700: #ecd4ff;
+  --color-sky_blue-800: #f3e5ff;
+  --color-sky_blue-900: #f9f2ff;
+  --color-sky_blue: #c37aff;
+
+  /* Brand palette (violet, plum, indigo). The older scale names above
+     now carry tints of these so existing classes follow the new colours. */
+  --color-violet-100: #3f0644;
+  --color-violet-200: #7d0b88;
+  --color-violet-300: #bc11cc;
+  --color-violet-400: #df37ef;
+  --color-violet-500: #ea7af4;
+  --color-violet-600: #ee95f6;
+  --color-violet-700: #f3b0f9;
+  --color-violet-800: #f7cafb;
+  --color-violet-900: #fbe5fd;
+  --color-violet: #ea7af4;
+  --color-raspberry_plum-100: #240c1c;
+  --color-raspberry_plum-200: #471839;
+  --color-raspberry_plum-300: #6b2555;
+  --color-raspberry_plum-400: #8f3171;
+  --color-raspberry_plum-500: #b43e8f;
+  --color-raspberry_plum-600: #c85ea6;
+  --color-raspberry_plum-700: #d686bc;
+  --color-raspberry_plum-800: #e3aed3;
+  --color-raspberry_plum-900: #f1d7e9;
+  --color-raspberry_plum: #b43e8f;
+  --color-indigo_bloom-100: #140024;
+  --color-indigo_bloom-200: #270047;
+  --color-indigo_bloom-300: #3b006b;
+  --color-indigo_bloom-400: #4f008f;
+  --color-indigo_bloom-500: #6200b3;
+  --color-indigo_bloom-600: #8700f5;
+  --color-indigo_bloom-700: #a538ff;
+  --color-indigo_bloom-800: #c37aff;
+  --color-indigo_bloom-900: #e1bdff;
+  --color-indigo_bloom: #6200b3;
+  --color-indigo-100: #0b001b;
+  --color-indigo-200: #170035;
+  --color-indigo-300: #220050;
+  --color-indigo-400: #2e006a;
+  --color-indigo-500: #3b0086;
+  --color-indigo-600: #5a00d0;
+  --color-indigo-700: #7f1dff;
+  --color-indigo-800: #a968ff;
+  --color-indigo-900: #d4b4ff;
+  --color-indigo: #3b0086;
+  --color-midnight_violet-100: #080108;
+  --color-midnight_violet-200: #100210;
+  --color-midnight_violet-300: #180417;
+  --color-midnight_violet-400: #20051f;
+  --color-midnight_violet-500: #290628;
+  --color-midnight_violet-600: #791275;
+  --color-midnight_violet-700: #c91ec4;
+  --color-midnight_violet-800: #e75de2;
+  --color-midnight_violet-900: #f3aef1;
+  --color-midnight_violet: #290628;
 }
 
 @theme inline {
@@ -102,7 +155,7 @@
   --color-focus-ring: var(--focus-ring);
   --font-sans: var(--font-body);
   --font-display: var(--font-heading);
-  --shadow-sm: 0 1px 2px rgb(43 26 54 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(41 6 40 / 0.06);
 }
 
 html {
@@ -218,22 +271,6 @@ h3,
   }
 }
 
-@keyframes float-soft {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, -8px, 0);
-  }
-}
-.animate-float-soft {
-  animation: float-soft 7s ease-in-out infinite;
-}
-.animate-float-soft-slow {
-  animation: float-soft 9s ease-in-out infinite;
-  animation-delay: -3s;
-}
 
 .press {
   transition-property: transform, background-color, color, border-color;
@@ -249,10 +286,6 @@ h3,
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
-  }
-  .animate-float-soft,
-  .animate-float-soft-slow {
-    animation: none !important;
   }
   .hero-in,
   .hero-in-scale {
@@ -313,13 +346,19 @@ h3,
 
 /* ---- Service cards: opaque pastel tiles with a gentle lift ---- */
 .service-card {
-  box-shadow: 0 1px 2px rgb(43 26 54 / 0.05);
+  box-shadow:
+    0 0 0 1px rgb(98 0 179 / 0.06),
+    0 1px 2px rgb(41 6 40 / 0.04),
+    0 16px 36px -18px rgb(98 0 179 / 0.22);
   transition: transform 220ms var(--reveal-ease), box-shadow 220ms var(--reveal-ease);
 }
 @media (hover: hover) {
   .service-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 24px rgb(43 26 54 / 0.1);
+    box-shadow:
+      0 0 0 1px rgb(98 0 179 / 0.08),
+      0 2px 4px rgb(41 6 40 / 0.04),
+      0 24px 48px -20px rgb(98 0 179 / 0.3);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -347,4 +386,250 @@ textarea {
   select {
     cursor: pointer;
   }
+}
+
+/* ---- Hero heading: each word rises from behind its own mask ---- */
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* Room for descenders in g, y and p, which the mask would otherwise clip. */
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.word-rise {
+  display: inline-block;
+  animation: word-rise 950ms var(--reveal-ease) both;
+}
+@keyframes word-rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ---- Hero photo: an aperture opening while the image settles ---- */
+/* Starts partly open rather than fully closed, so the photo paints on the
+   first frame and does not delay Largest Contentful Paint. */
+@keyframes photo-unveil {
+  from {
+    clip-path: inset(10% 10% 10% 10% round 28px);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round calc(2rem - 6px));
+  }
+}
+@keyframes photo-settle {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.photo-unveil {
+  animation: photo-unveil 1150ms var(--reveal-ease) 150ms both;
+}
+.photo-unveil-img {
+  animation: photo-settle 1700ms var(--reveal-ease) 150ms both;
+}
+
+/* Opacity only, so it can share an element with a GSAP transform. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fade-in-slow {
+  animation: fade-in 1400ms ease-out 200ms both;
+}
+
+/* ---- Lenis smooth scroll (its recommended base styles) ---- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word-rise,
+  .photo-unveil,
+  .photo-unveil-img,
+  .fade-in-slow {
+    animation: none !important;
+    transform: none !important;
+    clip-path: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ---- Booking calendar (react-day-picker) in the site palette ---- */
+.booking-calendar .rdp-root {
+  --rdp-accent-color: var(--primary);
+  --rdp-accent-background-color: var(--primary-soft);
+  --rdp-day-height: 44px;
+  --rdp-day-width: 44px;
+  --rdp-day_button-height: 40px;
+  --rdp-day_button-width: 40px;
+  --rdp-day_button-border-radius: 12px;
+  --rdp-today-color: var(--accent);
+  --rdp-disabled-opacity: 0.4;
+}
+.booking-calendar .rdp-caption_label {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+.booking-calendar .rdp-weekday {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.booking-calendar .rdp-day_button {
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.booking-calendar .rdp-open .rdp-day_button {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+.booking-calendar .rdp-limited .rdp-day_button {
+  background: var(--highlight-soft);
+  color: var(--ink);
+}
+.booking-calendar .rdp-full .rdp-day_button {
+  text-decoration: line-through;
+}
+.booking-calendar .rdp-selected .rdp-day_button {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+/* ---- Interaction motion: booking sheet, dialog, steps, confirmation,
+   collapses and the phone menu. Transform and opacity only. ---- */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes overlay-in { from { opacity: 0; } }
+@keyframes overlay-out { to { opacity: 0; } }
+@keyframes sheet-up { from { transform: translateY(100%); } }
+@keyframes sheet-down { to { transform: translateY(100%); } }
+@keyframes sheet-in-right { from { transform: translateX(100%); } }
+@keyframes sheet-out-right { to { transform: translateX(100%); } }
+@keyframes dialog-in { from { opacity: 0; transform: scale(0.96); } }
+@keyframes dialog-out { to { opacity: 0; transform: scale(0.96); } }
+
+/* Radix keeps the element mounted until the closing animation ends. */
+.overlay-anim[data-state="open"] { animation: overlay-in 200ms ease-out; }
+.overlay-anim[data-state="closed"] { animation: overlay-out 200ms ease-in forwards; }
+.sheet-bottom[data-state="open"] { animation: sheet-up 400ms var(--ease-drawer); }
+.sheet-bottom[data-state="closed"] { animation: sheet-down 250ms var(--ease-drawer) forwards; }
+.sheet-right[data-state="open"] { animation: sheet-in-right 400ms var(--ease-drawer); }
+.sheet-right[data-state="closed"] { animation: sheet-out-right 250ms var(--ease-drawer) forwards; }
+.dialog-anim[data-state="open"] { animation: dialog-in 220ms var(--ease-out); }
+.dialog-anim[data-state="closed"] { animation: dialog-out 160ms ease-in forwards; }
+
+/* Booking steps slide in from the direction the patient is moving. */
+@keyframes step-in-forward { from { opacity: 0; transform: translateX(12px); } }
+@keyframes step-in-back { from { opacity: 0; transform: translateX(-12px); } }
+.step-in-forward { animation: step-in-forward 220ms var(--ease-out) both; }
+.step-in-back { animation: step-in-back 220ms var(--ease-out) both; }
+
+/* Booking confirmation: the one moment that earns a small flourish. */
+@keyframes confirm-in { from { opacity: 0; transform: scale(0.96); } }
+@keyframes confirm-check { from { opacity: 0; transform: scale(0.6); } }
+.confirm-in { animation: confirm-in 320ms var(--ease-out) both; }
+.confirm-check { animation: confirm-check 260ms cubic-bezier(0.34, 1.4, 0.64, 1) 120ms both; }
+
+/* Phone menu drops from the header it belongs to. */
+.menu-drop {
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+}
+@starting-style {
+  .menu-drop { opacity: 0; transform: translateY(-8px); }
+}
+
+/* FAQ answers open smoothly where the browser can size to "auto";
+   elsewhere they snap open exactly as before. */
+@supports (interpolate-size: allow-keywords) {
+  .faq-item { interpolate-size: allow-keywords; }
+  .faq-item::details-content {
+    height: 0;
+    opacity: 0;
+    overflow: clip;
+    transition:
+      height 250ms var(--ease-out),
+      opacity 250ms var(--ease-out),
+      content-visibility 250ms allow-discrete;
+  }
+  .faq-item[open]::details-content { height: auto; opacity: 1; }
+}
+
+/* Reduced motion: overlays, sheets and dialogs fade gently instead of
+   sliding. These beat the global near-zero duration rule on specificity. */
+@media (prefers-reduced-motion: reduce) {
+  .overlay-anim[data-state="open"],
+  .sheet-bottom[data-state="open"],
+  .sheet-right[data-state="open"],
+  .dialog-anim[data-state="open"] {
+    animation: overlay-in 150ms ease-out !important;
+  }
+  .overlay-anim[data-state="closed"],
+  .sheet-bottom[data-state="closed"],
+  .sheet-right[data-state="closed"],
+  .dialog-anim[data-state="closed"] {
+    animation: overlay-out 150ms ease-in forwards !important;
+  }
+  .step-in-forward,
+  .step-in-back,
+  .confirm-in {
+    animation: overlay-in 200ms ease-out both !important;
+  }
+}
+
+/* ---- Surfaces. Cards float on a soft violet-tinted shadow instead of a
+   grey hairline border; form inputs keep their borders so fields stay
+   easy to find. ---- */
+@utility card-soft {
+  box-shadow:
+    0 0 0 1px rgb(98 0 179 / 0.06),
+    0 1px 2px rgb(41 6 40 / 0.04),
+    0 16px 36px -18px rgb(98 0 179 / 0.22);
+}
+
+/* Double frame for the three key surfaces (her photo, the booking card and
+   the two feature cards): a tinted tray with a panel sitting inside it.
+   The inner radius is the outer radius minus the tray padding, so the two
+   curves stay concentric. */
+@utility bezel {
+  padding: 6px;
+  border-radius: 2rem;
+  background: rgb(98 0 179 / 0.05);
+  box-shadow:
+    0 0 0 1px rgb(98 0 179 / 0.08),
+    0 28px 56px -28px rgb(98 0 179 / 0.35);
+}
+@utility bezel-core {
+  border-radius: calc(2rem - 6px);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.7);
+}
+
+/* One stroke weight for every icon: lighter lines read more precise. */
+.lucide {
+  stroke-width: 1.5;
 }

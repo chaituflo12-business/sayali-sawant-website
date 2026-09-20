@@ -17,7 +17,7 @@ export function Location() {
   const [showMap, setShowMap] = useState(false);
 
   return (
-    <section id="location" className="scroll-mt-24 bg-background py-14">
+    <section id="location" className="scroll-mt-24 bg-background py-14 md:py-20 lg:py-28">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-2">
         <Reveal>
           <h2 className="font-display text-2xl text-ink md:text-3xl">
@@ -46,7 +46,7 @@ export function Location() {
         <Reveal
           variant="scale"
           delay={160}
-          className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm"
+          className="card-soft overflow-hidden rounded-2xl bg-surface"
         >
           {showMap ? (
             <iframe

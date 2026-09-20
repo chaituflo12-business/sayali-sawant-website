@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const buttonVariants = cva(
-  "press inline-flex items-center justify-center gap-2 rounded-xl text-sm font-medium min-h-11 min-w-11 px-4 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring disabled:pointer-events-none disabled:opacity-50",
+  "press inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium min-h-11 min-w-11 px-4 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {

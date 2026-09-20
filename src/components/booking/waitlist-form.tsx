@@ -67,7 +67,7 @@ export function WaitlistForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="mt-4 space-y-3 rounded-xl border border-border bg-surface p-3"
+      className="card-soft mt-4 space-y-3 rounded-2xl bg-surface p-3"
     >
       <p className="text-sm text-ink">Join the waitlist for {dayLabel}</p>
       <input

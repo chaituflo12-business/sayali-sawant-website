@@ -35,13 +35,13 @@ export function BrandMark({
           <circle cx="32" cy="32" r="32" />
         </clipPath>
       </defs>
-      <circle cx="32" cy="32" r="32" fill="#2b1a36" className="mark-disc" />
+      <circle cx="32" cy="32" r="32" fill="#290628" className="mark-disc" />
       <g clipPath={`url(#${id})`}>
         <circle
           cx="52"
           cy="12"
           r="19"
-          fill="#ffafcc"
+          fill="#ea7af4"
           opacity="0.92"
           className="mark-dot"
         />

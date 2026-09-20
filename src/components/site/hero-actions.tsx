@@ -2,6 +2,7 @@
 
 import { buttonVariants, cn } from "@/lib/utils";
 import { useBooking } from "@/components/site/booking-provider";
+import { ArrowChip } from "@/components/site/arrow-chip";
 
 export function HeroActions({ directionsUrl }: { directionsUrl: string }) {
   const { scrollOrOpen } = useBooking();
@@ -11,9 +12,10 @@ export function HeroActions({ directionsUrl }: { directionsUrl: string }) {
       <button
         type="button"
         onClick={scrollOrOpen}
-        className={cn(buttonVariants({ size: "lg" }))}
+        className={cn(buttonVariants({ size: "lg" }), "group gap-3 pr-5")}
       >
         Book OPD slot
+        <ArrowChip />
       </button>
       <a
         href={directionsUrl}

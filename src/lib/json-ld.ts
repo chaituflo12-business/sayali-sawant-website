@@ -7,7 +7,6 @@ import {
   GOOGLE_MAPS_URL,
   LANGUAGES,
   LOCALITY,
-  MMC_REG_NO,
   OPD_HOURS,
   type OpdDay,
   PHONE,
@@ -105,11 +104,6 @@ export function homeJsonLd(hours: OpdDay[] = OPD_HOURS) {
           addressRegion: "Maharashtra",
           postalCode: PINCODE,
           addressCountry: "IN",
-        },
-        identifier: {
-          "@type": "PropertyValue",
-          name: "Maharashtra Medical Council Registration",
-          value: MMC_REG_NO,
         },
         alumniOf: QUALIFICATIONS.map((q) => ({
           "@type": "Organization",

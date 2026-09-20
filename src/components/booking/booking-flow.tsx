@@ -6,7 +6,11 @@ import {
   loadBookingBoard,
   loadSlotsForDay,
 } from "@/app/actions/appointments";
-import type { BookedAppointment, DaySummary, PublicSlot } from "@/lib/slot-types";
+import type {
+  BookedAppointment,
+  DaySummary,
+  PublicSlot,
+} from "@/lib/slot-types";
 import { formatIstTime } from "@/lib/datetime";
 import { buttonVariants, cn } from "@/lib/utils";
 import { DPDP_CONSENT } from "@/lib/disclaimer";
@@ -20,8 +24,9 @@ import { GOOGLE_MAPS_DIR_URL, telHref, whatsappHref } from "@/config/site";
 import { ConfirmationCard } from "@/components/booking/confirmation-card";
 import { BrandMark } from "@/components/site/brand-mark";
 import { WaitlistForm } from "@/components/booking/waitlist-form";
+import { DateStrip, MonthCalendar } from "@/components/booking/date-picker";
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2;
 
 function dayLabel(date: string) {
   return new Date(`${date}T00:00:00+05:30`).toLocaleDateString("en-GB", {
@@ -30,12 +35,6 @@ function dayLabel(date: string) {
     month: "short",
     timeZone: "Asia/Kolkata",
   });
-}
-
-function dayTone(status: DaySummary["status"]) {
-  if (status === "available") return "border-accent bg-accent-soft";
-  if (status === "limited") return "border-highlight bg-highlight-soft text-ink";
-  return "border-border bg-background text-muted";
 }
 
 export function BookingFlow({
@@ -48,6 +47,15 @@ export function BookingFlow({
   onReschedule?: (slotId: string) => Promise<void>;
 }) {
   const [step, setStep] = useState<Step>(1);
+  // Which way the last step change went, so the new step slides in from
+  // that side. Null on first render: the opening step does not animate.
+  const [stepDirection, setStepDirection] = useState<
+    "forward" | "back" | null
+  >(null);
+  function goToStep(next: Step) {
+    setStepDirection(next > step ? "forward" : "back");
+    setStep(next);
+  }
   const [days, setDays] = useState<DaySummary[]>([]);
   const [live, setLive] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -98,7 +106,7 @@ export function BookingFlow({
     });
   }, [selectedDate]);
 
-  const progress = useMemo(() => [1, 2, 3] as const, []);
+  const progress = useMemo(() => [1, 2] as const, []);
   const noneRemaining = useMemo(
     () => slots.every((slot) => slot.remaining <= 0),
     [slots],
@@ -144,7 +152,7 @@ export function BookingFlow({
       if (result.code === "SLOT_TAKEN") {
         setSlotTaken(true);
         setSelectedSlot(null);
-        setStep(2);
+        goToStep(1);
         await refetchSelectedDay();
         return;
       }
@@ -185,7 +193,7 @@ export function BookingFlow({
 
   if (sendOnWhatsApp) {
     return (
-      <div className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
+      <div className="card-soft rounded-2xl bg-surface p-5">
         <h3 className="font-display text-lg text-ink">
           Send your request on WhatsApp
         </h3>
@@ -226,7 +234,7 @@ export function BookingFlow({
   return (
     <div className={cn("flex flex-col gap-5", compact ? "" : "p-1")}>
       {!live ? (
-        <p className="rounded-xl border border-border bg-primary-soft px-3 py-2 text-xs text-ink">
+        <p className="rounded-xl bg-primary-soft px-3 py-2 text-xs text-ink">
           Showing typical OPD times. Live booking opens once the clinic calendar
           is connected.
         </p>
@@ -244,39 +252,102 @@ export function BookingFlow({
         ))}
       </div>
       <p className="text-center text-xs text-muted">
-        Step {step} of 3 · {step === 1 ? "Pick day" : step === 2 ? "Pick time" : "Your details"}
+        Step {step} of 2 ·{" "}
+        {step === 1 ? "Pick a date and time" : "Your details"}
       </p>
 
       {step === 1 ? (
-        <div>
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {days.map((day) => {
-              const disabled = day.status === "closed" || day.status === "full";
-              const selected = selectedDate === day.date;
-              return (
-                <button
-                  key={day.date}
-                  type="button"
-                  disabled={disabled}
-                  aria-pressed={selected}
-                  onClick={() => setSelectedDate(day.date)}
-                  className={cn(
-                    "min-h-11 min-w-[4.5rem] rounded-xl border px-2 text-xs font-medium",
-                    dayTone(day.status),
-                    selected && "ring-2 ring-primary",
-                    disabled && "opacity-50",
-                  )}
-                >
-                  {dayLabel(day.date)}
-                </button>
-              );
-            })}
+        <div
+          className={cn(
+            "flex flex-col gap-4 md:grid md:grid-cols-[auto_minmax(0,1fr)] md:items-start md:gap-6",
+            stepDirection === "back" && "step-in-back",
+          )}
+        >
+          {/* Phones get a swipeable strip of date cards; a month grid of
+              greyed evenings is too small to tap and mostly empty. */}
+          <DateStrip
+            className="md:hidden"
+            days={days}
+            selected={selectedDate}
+            onSelect={setSelectedDate}
+          />
+          <div className="hidden md:block">
+            <MonthCalendar
+              days={days}
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+            />
           </div>
+
+          {/* Times appear beside the calendar the moment a date is chosen,
+              so choosing a date and a time is one step, not two. */}
+          <div className="md:min-h-[20rem]">
+            {selectedDate ? (
+              <p className="mb-3 text-sm font-medium text-ink">
+                Times on {dayLabel(selectedDate)}{" "}
+                <span className="font-normal text-muted">(IST)</span>
+              </p>
+            ) : null}
+            {slotTaken ? (
+              <p
+                role="alert"
+                className="mb-3 rounded-xl border border-error bg-highlight-soft px-3 py-2 text-sm text-error"
+              >
+                That time was just taken, please pick another
+              </p>
+            ) : null}
+            {loadingSlots ? (
+              <p className="flex items-center gap-3 text-sm text-muted">
+                <BrandMark size={28} className="mark-pulse" title="Loading" />
+                Loading times…
+              </p>
+            ) : (
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-3">
+                {slots.map((slot) => {
+                  const taken = slot.remaining <= 0;
+                  const selected = selectedSlot?.slotId === slot.slotId;
+                  return (
+                    <button
+                      key={slot.slotId}
+                      type="button"
+                      disabled={taken}
+                      aria-pressed={selected}
+                      aria-label={`${formatIstTime(new Date(slot.startsAt))} IST${taken ? ", taken" : ""}`}
+                      onClick={() => setSelectedSlot(slot)}
+                      className={cn(
+                        "min-h-11 rounded-xl border px-2 text-sm transition-colors duration-150",
+                        taken
+                          ? "cursor-not-allowed border-border bg-background text-muted line-through"
+                          : selected
+                            ? "border-primary bg-primary text-white"
+                            : "border-accent bg-accent-soft text-ink",
+                      )}
+                    >
+                      {formatIstTime(new Date(slot.startsAt))}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+            {selectedDate && noneRemaining && !loadingSlots ? (
+              <>
+                <p className="text-sm text-muted">No open times on this day.</p>
+                {!manageToken ? (
+                  <WaitlistForm
+                    dateIst={selectedDate}
+                    dayLabel={dayLabel(selectedDate)}
+                    visitType={visitType}
+                  />
+                ) : null}
+              </>
+            ) : null}
+          </div>
+
           <button
             type="button"
-            className={cn(buttonVariants(), "mt-4 w-full")}
-            disabled={!selectedDate}
-            onClick={() => setStep(2)}
+            className={cn(buttonVariants(), "w-full md:col-span-2")}
+            disabled={!selectedSlot}
+            onClick={() => goToStep(2)}
           >
             Continue
           </button>
@@ -284,84 +355,13 @@ export function BookingFlow({
       ) : null}
 
       {step === 2 ? (
-        <div>
-          {slotTaken ? (
-            <p
-              role="alert"
-              className="mb-3 rounded-xl border border-error bg-highlight-soft px-3 py-2 text-sm text-error"
-            >
-              That time was just taken, please pick another
-            </p>
-          ) : null}
-          {loadingSlots ? (
-            <p className="flex items-center gap-3 text-sm text-muted">
-              <BrandMark size={28} className="mark-pulse" title="Loading" />
-              Loading times…
-            </p>
-          ) : (
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-              {slots.map((slot) => {
-                const taken = slot.remaining <= 0;
-                const selected = selectedSlot?.slotId === slot.slotId;
-                return (
-                  <button
-                    key={slot.slotId}
-                    type="button"
-                    disabled={taken}
-                    aria-pressed={selected}
-                    aria-label={`${formatIstTime(new Date(slot.startsAt))} IST${taken ? ", taken" : ""}`}
-                    onClick={() => setSelectedSlot(slot)}
-                    className={cn(
-                      "min-h-11 rounded-xl border px-2 text-xs",
-                      taken
-                        ? "cursor-not-allowed border-border bg-background text-muted line-through"
-                        : "border-accent bg-accent-soft text-ink",
-                      selected && "ring-2 ring-primary",
-                    )}
-                  >
-                    {formatIstTime(new Date(slot.startsAt))}
-                    <span aria-hidden className="mt-0.5 block text-[10px] text-muted">
-                      IST
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+        <form
+          onSubmit={onSubmit}
+          className={cn(
+            "space-y-3",
+            stepDirection === "forward" && "step-in-forward",
           )}
-          {noneRemaining && !loadingSlots ? (
-            <>
-              <p className="text-sm text-muted">No open times on this day.</p>
-              {!manageToken && selectedDate ? (
-                <WaitlistForm
-                  dateIst={selectedDate}
-                  dayLabel={dayLabel(selectedDate)}
-                  visitType={visitType}
-                />
-              ) : null}
-            </>
-          ) : null}
-          <div className="mt-4 flex gap-2">
-            <button
-              type="button"
-              className={cn(buttonVariants({ variant: "secondary" }), "flex-1")}
-              onClick={() => setStep(1)}
-            >
-              Back
-            </button>
-            <button
-              type="button"
-              className={cn(buttonVariants(), "flex-1")}
-              disabled={!selectedSlot}
-              onClick={() => setStep(3)}
-            >
-              Continue
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {step === 3 ? (
-        <form onSubmit={onSubmit} className="space-y-3">
+        >
           <input
             type="text"
             name="website"
@@ -403,7 +403,9 @@ export function BookingFlow({
                     maxLength={10}
                     value={whatsapp}
                     onChange={(e) =>
-                      setWhatsapp(e.target.value.replace(/\D/g, "").slice(0, 10))
+                      setWhatsapp(
+                        e.target.value.replace(/\D/g, "").slice(0, 10),
+                      )
                     }
                     className="min-h-11 w-full px-3 text-ink"
                     placeholder="9XXXXXXXXX"
@@ -450,7 +452,9 @@ export function BookingFlow({
                 <select
                   value={visitType}
                   onChange={(e) =>
-                    setVisitType(e.target.value as (typeof visitTypeValues)[number])
+                    setVisitType(
+                      e.target.value as (typeof visitTypeValues)[number],
+                    )
                   }
                   className="mt-1 min-h-11 w-full rounded-xl border border-border bg-surface px-3 text-ink"
                 >
@@ -502,7 +506,7 @@ export function BookingFlow({
             <button
               type="button"
               className={cn(buttonVariants({ variant: "secondary" }), "flex-1")}
-              onClick={() => setStep(2)}
+              onClick={() => goToStep(1)}
             >
               Back
             </button>

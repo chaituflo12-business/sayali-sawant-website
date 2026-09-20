@@ -5,7 +5,7 @@ import { Reveal } from "@/components/site/reveal";
 import { JsonLd } from "@/components/site/json-ld";
 import { breadcrumbJsonLd } from "@/lib/json-ld";
 import { buttonVariants, cn } from "@/lib/utils";
-import { DOCTOR_NAME, MMC_REG_NO } from "@/config/site";
+import { DOCTOR_NAME } from "@/config/site";
 
 const TITLE = "IVF Specialist in Goregaon West | Dr. Sayali Sawant";
 const DESCRIPTION =
@@ -49,8 +49,7 @@ export default function IvfSpecialistGoregaonWestPage() {
           <p>
             She completed MBBS at Maharashtra University of Health Sciences,
             Nashik (2017) and DNB Obstetrics & Gynaecology in 2020, training
-            at KEM Hospital, Pune. She is registered with the Maharashtra
-            Medical Council (Reg. No. {MMC_REG_NO}).
+            at KEM Hospital, Pune.
           </p>
           <h2 className="font-display pt-2 text-xl text-ink">
             What a fertility consultation includes

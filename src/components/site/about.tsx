@@ -1,9 +1,9 @@
-import { DOCTOR_NAME, MMC_REG_NO, QUALIFICATIONS } from "@/config/site";
+import { DOCTOR_NAME, QUALIFICATIONS } from "@/config/site";
 import { Reveal } from "@/components/site/reveal";
 
 export function About() {
   return (
-    <section id="about" className="scroll-mt-24 bg-surface-warm py-14">
+    <section id="about" className="scroll-mt-24 bg-surface-warm py-14 md:py-20 lg:py-28">
       <div className="mx-auto max-w-6xl px-4">
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           About {DOCTOR_NAME}
@@ -15,8 +15,7 @@ export function About() {
               IVF/Infertility Specialist practising in Goregaon West, Mumbai. She
               completed her MBBS at Maharashtra University of Health Sciences,
               Nashik in 2017, and her DNB in Obstetrics & Gynaecology in 2020,
-              training at KEM Hospital, Pune. She is registered with the
-              Maharashtra Medical Council (Reg. No. {MMC_REG_NO}).
+              training at KEM Hospital, Pune.
             </p>
             <p>
               Her consultation style is unhurried and evidence-based. She
@@ -32,7 +31,7 @@ export function About() {
               emergencies are directed to hospital emergency departments.
             </p>
           </article>
-          <ol className="rounded-xl border border-border bg-surface p-5 shadow-sm">
+          <ol className="card-soft rounded-2xl bg-surface p-5">
             {QUALIFICATIONS.map((item) => (
               <li
                 key={item.degree}

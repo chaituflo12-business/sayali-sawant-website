@@ -1,3 +1,4 @@
+import { CircleCheck } from "lucide-react";
 import type { BookedAppointment } from "@/lib/slot-types";
 import { buttonVariants, cn } from "@/lib/utils";
 import { WHATSAPP_AUTOMATION_LIVE } from "@/config/site";
@@ -8,8 +9,17 @@ export function ConfirmationCard({
   appointment: BookedAppointment;
 }) {
   return (
-    <div className="rounded-xl border border-accent bg-accent-soft p-5">
-      <p role="status" className="text-sm font-medium text-accent">
+    <div className="confirm-in rounded-xl border border-accent bg-accent-soft p-5">
+      <p
+        role="status"
+        className="flex items-center gap-2 text-sm font-medium text-accent"
+      >
+        <span
+          className="confirm-check flex h-7 w-7 items-center justify-center rounded-full bg-accent text-white"
+          aria-hidden
+        >
+          <CircleCheck className="h-4 w-4" strokeWidth={2.25} />
+        </span>
         {WHATSAPP_AUTOMATION_LIVE ? "Appointment confirmed" : "Appointment booked"}
       </p>
       <p className="font-display mt-2 text-xl text-ink">

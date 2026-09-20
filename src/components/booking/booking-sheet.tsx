@@ -15,7 +15,7 @@ export function BookingSheet() {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent side="bottom" className="overflow-y-auto">
+      <SheetContent side="bottom" className="overflow-y-auto" data-lenis-prevent>
         <SheetHeader>
           <SheetTitle>Book OPD slot</SheetTitle>
           <SheetDescription>

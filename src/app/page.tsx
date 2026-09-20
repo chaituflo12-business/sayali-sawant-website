@@ -4,6 +4,9 @@ import { TrustStrip } from "@/components/site/trust-strip";
 import { Services } from "@/components/site/services";
 import { VisitSteps } from "@/components/site/visit-steps";
 import { OpdHours } from "@/components/site/opd-hours";
+import { PregnancyJourney } from "@/components/site/pregnancy-journey";
+import { FertilityPathway } from "@/components/site/fertility-pathway";
+import { FirstVisit } from "@/components/site/first-visit";
 import { Location } from "@/components/site/location";
 import { About } from "@/components/site/about";
 import { Faq } from "@/components/site/faq";
@@ -35,7 +38,10 @@ export default async function HomePage() {
       <Hero summary={summary} />
       <TrustStrip />
       <Services />
+      <PregnancyJourney />
+      <FertilityPathway />
       <VisitSteps />
+      <FirstVisit />
       <OpdHours summary={summary} hours={hours} />
       <BookingCard />
       <Location />

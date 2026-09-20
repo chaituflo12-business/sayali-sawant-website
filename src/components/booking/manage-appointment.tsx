@@ -62,7 +62,7 @@ export function ManageAppointment({
 
   if (mode === "cancelled") {
     return (
-      <p className="mt-6 rounded-xl border border-border bg-surface p-4 text-sm text-ink">
+      <p className="card-soft mt-6 rounded-2xl bg-surface p-4 text-sm text-ink">
         This appointment has been cancelled. You can book a new slot from the
         home page if you still need a visit.
       </p>
@@ -106,7 +106,7 @@ export function ManageAppointment({
           </button>
         </div>
       ) : (
-        <div className="rounded-xl border border-border bg-surface p-4">
+        <div className="card-soft rounded-2xl bg-surface p-4">
           <p className="mb-3 text-sm font-medium text-ink">Pick a new time</p>
           <BookingFlow manageToken={token} onReschedule={onReschedule} />
           <button

@@ -1,9 +1,5 @@
 import "server-only";
-import {
-  OPD_HOURS,
-  SLOT_CAPACITY,
-  SLOT_MINUTES,
-} from "@/config/site";
+import { OPD_HOURS, SLOT_CAPACITY, SLOT_MINUTES } from "@/config/site";
 import {
   addIstDays,
   formatIstDate,
@@ -13,7 +9,12 @@ import {
   startOfIstDay,
 } from "@/lib/datetime";
 import { createSupabaseServer } from "@/lib/supabase/server";
-import type { DayAvailability, DaySummary, PublicSlot, SlotSummary } from "@/lib/slot-types";
+import type {
+  DayAvailability,
+  DaySummary,
+  PublicSlot,
+  SlotSummary,
+} from "@/lib/slot-types";
 
 export type { DayAvailability, DaySummary, PublicSlot, SlotSummary };
 
@@ -71,20 +72,27 @@ function generateStubSlots(from: Date, to: Date): PublicSlot[] {
   return slots;
 }
 
-function summariseDays(slots: PublicSlot[], from: Date): DaySummary[] {
+function summariseDays(
+  slots: PublicSlot[],
+  from: Date,
+  count: number,
+): DaySummary[] {
   const days: DaySummary[] = [];
-  for (let i = 0; i < 7; i += 1) {
+  for (let i = 0; i < count; i += 1) {
     const day = addIstDays(from, i);
     const key = formatIstDate(day);
     const weekday = istWeekday(day);
     const template = OPD_HOURS[weekday as 0 | 1 | 2 | 3 | 4 | 5 | 6];
-    const ofDay = slots.filter((s) => formatIstDate(new Date(s.startsAt)) === key);
+    const ofDay = slots.filter(
+      (s) => formatIstDate(new Date(s.startsAt)) === key,
+    );
     const remaining = ofDay.reduce((sum, s) => sum + s.remaining, 0);
     const total = ofDay.length;
     let status: DayAvailability = "available";
-    if (!template || template.closed) status = "closed";
+    if (total === 0 && (!template || template.closed)) status = "closed";
     else if (total === 0 || remaining === 0) status = "full";
-    else if (remaining <= Math.max(2, Math.floor(total * 0.25))) status = "limited";
+    else if (remaining <= Math.max(2, Math.floor(total * 0.25)))
+      status = "limited";
     days.push({ date: key, weekday, status, remaining, total });
   }
   return days;
@@ -115,15 +123,15 @@ export async function getAvailableSlots(
   return { live: false, slots: generateStubSlots(from, to) };
 }
 
-export async function getSlotSummary(): Promise<SlotSummary> {
+export async function getSlotSummary(dayCount = 7): Promise<SlotSummary> {
   const from = new Date();
-  const to = addIstDays(startOfIstDay(from), 7);
+  const to = addIstDays(startOfIstDay(from), dayCount);
   const { live, slots } = await getAvailableSlots(from, to);
   const next = slots[0]?.startsAt ?? null;
   return {
     live,
     nextAvailable: next,
-    days: summariseDays(slots, startOfIstDay(from)),
+    days: summariseDays(slots, startOfIstDay(from), dayCount),
   };
 }
 

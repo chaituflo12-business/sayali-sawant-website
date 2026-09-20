@@ -17,8 +17,8 @@ export default function TwitterImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: 80,
-          background: "#f2f9ff",
-          color: "#2b1a36",
+          background: "#fdf3fe",
+          color: "#290628",
         }}
       >
         <div
@@ -33,7 +33,7 @@ export default function TwitterImage() {
               width: 96,
               height: 96,
               borderRadius: 48,
-              background: "#2b1a36",
+              background: "#290628",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -49,7 +49,7 @@ export default function TwitterImage() {
                 width: 58,
                 height: 58,
                 borderRadius: 29,
-                background: "#ffafcc",
+                background: "#ea7af4",
                 opacity: 0.92,
               }}
             />
@@ -70,7 +70,7 @@ export default function TwitterImage() {
         <div style={{ fontSize: 64, fontWeight: 700, marginTop: 12 }}>
           Dr. Sayali Sawant
         </div>
-        <div style={{ fontSize: 32, marginTop: 16, color: "#0056a7" }}>
+        <div style={{ fontSize: 32, marginTop: 16, color: "#6200b3" }}>
           Gynaecologist & IVF Specialist
         </div>
         <div
@@ -79,7 +79,7 @@ export default function TwitterImage() {
             height: 10,
             marginTop: 28,
             borderRadius: 5,
-            background: "#ffafcc",
+            background: "#ea7af4",
           }}
         />
         <div style={{ fontSize: 28, marginTop: 28 }}>

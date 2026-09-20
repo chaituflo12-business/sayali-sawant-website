@@ -30,7 +30,8 @@ function str(record: Record<string, unknown>, key: string): string {
 
 export async function loadBookingBoard(): Promise<ActionResult<BookingBoard>> {
   try {
-    const summary = await getSlotSummary();
+    // Slots are materialised 21 days ahead; show all of them.
+    const summary = await getSlotSummary(21);
     return ok({
       live: summary.live,
       days: summary.days,

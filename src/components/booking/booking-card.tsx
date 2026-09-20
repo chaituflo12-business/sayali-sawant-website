@@ -4,7 +4,7 @@ import { WHATSAPP_AUTOMATION_LIVE } from "@/config/site";
 
 export function BookingCard() {
   return (
-    <section id="book" className="scroll-mt-24 py-14">
+    <section id="book" className="scroll-mt-24 py-14 md:py-20 lg:py-28">
       <div className="mx-auto max-w-3xl px-4">
         <h2 className="font-display text-2xl text-ink md:text-3xl">
           Book an OPD appointment
@@ -15,8 +15,10 @@ export function BookingCard() {
             ? "You will receive a WhatsApp message with directions."
             : "The clinic confirms your time on WhatsApp."}
         </p>
-        <div className="mt-6 hidden rounded-xl border border-border bg-surface p-6 shadow-sm md:block">
-          <BookingFlow />
+        <div className="bezel mt-8 hidden md:block">
+          <div className="bezel-core bg-surface p-6">
+            <BookingFlow />
+          </div>
         </div>
         {/* A phone gets the action itself, not directions to a button elsewhere. */}
         <BookingOpenButton className="mt-5 md:hidden" />

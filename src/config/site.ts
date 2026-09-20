@@ -3,7 +3,6 @@ export const SPECIALITY_SHORT = "Obstetrician & Gynaecologist";
 
 export const SPECIALITY_LINE =
   "Obstetrician · Gynaecologist · IVF Specialist";
-export const PRACTICE_START_YEAR = 2017;
 export const MMC_REG_NO = "2017/08/3926";
 
 /**
@@ -60,7 +59,7 @@ export const PARKING_NOTE =
   "Street parking near the clinic. Confirm on WhatsApp before you arrive if you are driving.";
 
 export const NEAREST_STATION =
-  "Goregaon station (Western line) and Goregaon Metro. Autos run to Shastri Nagar Road Number 2 — use Get directions.";
+  "Goregaon station (Western line) and Goregaon Metro. Autos run to Shastri Nagar Road Number 2. Use Get directions for the route.";
 
 export const GOOGLE_PLACE_ID = "PLACEHOLDER_GOOGLE_PLACE_ID";
 
@@ -81,6 +80,9 @@ export const GEO = {
 
 export const WHATSAPP_NUMBER = "+919000000000";
 export const PHONE = "+91 90000 00000";
+
+/** TODO: replace with Dr. Sawant's own Instagram page before launch. */
+export const INSTAGRAM_URL = "https://www.instagram.com/";
 export const EMAIL = "appointments@drsayalisawant.com";
 
 export const CONSULT_FEE: number | null = null;
@@ -159,9 +161,6 @@ export const SLOT_CAPACITY = 1;
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.drsayalisawant.com";
 
-export function yearsInPractice(now = new Date()): number {
-  return Math.max(0, now.getFullYear() - PRACTICE_START_YEAR);
-}
 
 export function telHref(): string {
   return `tel:${PHONE.replace(/\s/g, "")}`;

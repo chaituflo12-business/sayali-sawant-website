@@ -4,6 +4,7 @@ import { Footer } from "@/components/site/footer";
 import { EmergencyDisclaimer } from "@/components/site/emergency-disclaimer";
 import { StickyBookBar } from "@/components/site/sticky-book-bar";
 import { BookingSheet } from "@/components/booking/booking-sheet";
+import { MotionLayer } from "@/components/site/motion-layer";
 
 export function SiteShell({
   children,
@@ -28,6 +29,7 @@ export function SiteShell({
       <Footer />
       {showSticky ? <StickyBookBar /> : null}
       <BookingSheet />
+      <MotionLayer />
     </>
   );
 }

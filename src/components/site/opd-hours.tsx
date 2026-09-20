@@ -27,7 +27,7 @@ export function OpdHours({
   const anyBreak = hours.some((day) => !day.closed && day.breakLabel);
 
   return (
-    <section id="opd-hours" className="scroll-mt-24 py-14">
+    <section id="opd-hours" className="scroll-mt-24 py-14 md:py-20 lg:py-28">
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
         <h2 className="font-display text-2xl text-ink md:text-3xl">
@@ -38,7 +38,7 @@ export function OpdHours({
           Time (IST).
         </p>
 
-        <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-surface shadow-sm">
+        <div className="card-soft mt-8 overflow-x-auto rounded-2xl bg-surface">
           <table className="w-full text-left text-sm">
             <caption className="sr-only">Weekly OPD hours</caption>
             <thead className="border-b border-border bg-primary-soft">
@@ -61,7 +61,7 @@ export function OpdHours({
                   </td>
                   {anyBreak ? (
                     <td className="px-4 py-3 text-muted">
-                      {day.closed || !day.breakLabel ? "—" : day.breakLabel}
+                      {day.closed || !day.breakLabel ? "None" : day.breakLabel}
                     </td>
                   ) : null}
                 </tr>
